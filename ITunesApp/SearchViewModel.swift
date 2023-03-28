@@ -15,9 +15,14 @@ enum RequestStatus {
 
 class SearchViewModel: ObservableObject {
     @Published var status: RequestStatus = .unfinished
-    @Published var allResults: [String]?
-    @Published var movieResults: [ITunesMovieResult.Result]?
-    @Published var ebookResults: [ITunesEbookResult.Result]?
+    @Published var movieResults: [ITunesMovieResult.Result]? = []
+    @Published var podcastResults: [ITunesPodcastResult.Result]? = []
+    @Published var musicResults: [ITunesMusicResult.Result]? = []
+    @Published var musicVideoResults: [ITunesMusicVideoResult.Result]? = []
+    @Published var audiobookResult: [ITunesAudiobookResult.Result]? = []
+    @Published var tvShowResults: [ITunesTVShowResult.Result]? = []
+    @Published var softwareResults: [ITunesSoftwareResult.Result]? = []
+    @Published var ebookResults: [ITunesEbookResult.Result]? = []
     @Published var resultCount: Int = 0
     private let url: String = "https://itunes.apple.com/search"
     
@@ -62,14 +67,12 @@ class SearchViewModel: ObservableObject {
         
         Task {
             let result = await Fetcher.fetch(componentURL)
-            print("********")
             switch result {
             case .failure(let error):
                 status = .failded
                 print(error)
                 
             case .success(let data):
-                print("______")
                 do {
                     // TODO: breakで処理を飛ばしてるとこを書く
                     switch itunes {
@@ -77,25 +80,39 @@ class SearchViewModel: ObservableObject {
                         break
                     case .movie:
                         let result = try JSONDecoder().decode(ITunesMovieResult.self, from: data)
-                        print("++++")
                         resultCount = result.resultCount
                         movieResults = result.results
-                        print("----")
-                        
+
                     case .podcast:
-                        break
+                        let result = try JSONDecoder().decode(ITunesPodcastResult.self, from: data)
+                        resultCount = result.resultCount
+                        podcastResults = result.results
+                        
                     case .music:
-                        break
+                        let result = try JSONDecoder().decode(ITunesMusicResult.self, from: data)
+                        resultCount = result.resultCount
+                        musicResults = result.results
+                        
                     case .musicVideo:
-                        break
+                        let result = try JSONDecoder().decode(ITunesMusicVideoResult.self, from: data)
+                        resultCount = result.resultCount
+                        musicVideoResults = result.results
+                    
                     case .audiobook:
-                        break
-                    case .shortFilm:
-                        break
+                        let result = try JSONDecoder().decode(ITunesAudiobookResult.self, from: data)
+                        resultCount = result.resultCount
+                        audiobookResult = result.results
+                   
                     case .tvShow:
-                        break
-                    case .softWare:
-                        break
+                        let result = try JSONDecoder().decode(ITunesTVShowResult.self, from: data)
+                        resultCount = result.resultCount
+                        tvShowResults = result.results
+                        
+                    case .software:
+                        let result = try JSONDecoder().decode(ITunesSoftwareResult.self, from: data)
+                        resultCount = result.resultCount
+                        softwareResults = result.results
+                       
                     case .ebook:
                         let result = try JSONDecoder().decode(ITunesEbookResult.self, from: data)
                         resultCount = result.resultCount
@@ -111,50 +128,5 @@ class SearchViewModel: ObservableObject {
             }
         }
     }
-    
-//    @MainActor
-//    private func decodeResult(itunes: ITunes, data: Data) {
-//        do {
-//            switch itunes {
-//            case .all:
-//                break
-//
-//            case .movie:
-//                let result = try JSONDecoder().decode(ITunesMovieResult.self, from: data)
-//                resultCount = result.resultCount
-//                movieResults = result.results
-//
-//            case .podcast:
-//                break
-//
-//            case .music:
-//                break
-//
-//            case .musicVideo:
-//                break
-//
-//            case .audiobook:
-//                break
-//
-//            case .shortFilm:
-//                break
-//
-//            case .tvShow:
-//                break
-//
-//            case .softWare:
-//                break
-//
-//            case .ebook:
-//                let result = try JSONDecoder().decode(ITunesEbookResult.self, from: data)
-//                resultCount = result.resultCount
-//                ebookResults = result.results
-//            }
-//
-//        } catch {
-//            print(error)
-//            status = .failded
-//        }
-//    }
 }
 

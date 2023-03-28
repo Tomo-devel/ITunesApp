@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SearchResultView: View {
     @ObservedObject var viewModel: SearchViewModel
-    @Binding var isSearch: Bool
     let term: String
     let media: String
     let itunes: ITunes
@@ -51,25 +50,142 @@ struct SearchResultView: View {
                         }
                         
                     case .podcast:
-                        Text("aaa")
+                        List(viewModel.podcastResults!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.trackName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
                     case .music:
-                        Text("aaa")
+                        List(viewModel.musicResults!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.artistName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
                     case .musicVideo:
-                        Text("aaa")
+                        List(viewModel.musicVideoResults!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.artistName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
                     case .audiobook:
-                        Text("aaa")
-                        
-                    case .shortFilm:
-                        Text("aaa")
+                        List(viewModel.audiobookResult!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.artistName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
                     case .tvShow:
-                        Text("aaa")
+                        List(viewModel.tvShowResults!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.artistName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
-                    case .softWare:
-                        Text("aaa")
+                    case .software:
+                        List(viewModel.softwareResults!, id: \.self) { result in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(result.artistName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.releaseDate)
+                                }
+                                .padding()
+                                
+                                Spacer()
+                                if let url = URL(string: result.artworkUrl100) {
+                                    AsyncImage(url: url)
+                                    
+                                } else {
+                                    ProgressView()
+                                }
+                                
+                                Spacer()
+                            }
+                        }
                         
                     case .ebook:
                         List(viewModel.ebookResults!, id: \.self) { result in
@@ -94,6 +210,7 @@ struct SearchResultView: View {
                             }
                         }
                     }
+                    
                 } else {
                     Text("検索した作品は見つかりませんでした。")
                 }
@@ -116,7 +233,6 @@ struct SearchResultView: View {
 struct SearchResultView_Previews: PreviewProvider {
     static var previews: some View {
         SearchResultView(viewModel: SearchViewModel(),
-                         isSearch: .constant(false),
                          term: "",
                          media: "",
                          itunes: .all)

@@ -14,9 +14,8 @@ enum ITunes: String, CaseIterable {
     case music
     case musicVideo
     case audiobook
-    case shortFilm
     case tvShow
-    case softWare
+    case software
     case ebook
     
     
@@ -34,11 +33,9 @@ enum ITunes: String, CaseIterable {
             return "ミュージックビデオ"
         case .audiobook:
             return "オーディオブック"
-        case .shortFilm:
-            return "ショートフィルム"
         case .tvShow:
             return "TV"
-        case .softWare:
+        case .software:
             return "アプリケーション"
         case .ebook:
             return "電子書籍"
@@ -61,9 +58,9 @@ struct HomeView: View {
             
         } detail: {
             NavigationStack {
-                SearchView(media: selectITunes?.rawValue ?? "",
-                           category: selectITunes?.changeJP() ?? "",
-                           itunes: selectITunes ?? .music)
+                SearchView(media: selectITunes?.rawValue ?? "tvShow",
+                           category: selectITunes?.changeJP() ?? "テレビ",
+                           itunes: selectITunes ?? .tvShow)
             }
         }
     }

@@ -19,87 +19,113 @@ struct SearchView: View {
         
         GeometryReader { geometry in
             VStack {
-                if isSearch {
-                    NavigationLink(value: "") {
-                        EmptyView()
-                    }
-                    .navigationDestination(isPresented: $isSearch) {
-                        SearchResultView(viewModel: viewModel,
-                                         isSearch: $isSearch,
-                                         term: term,
-                                         media: media,
-                                         itunes: itunes)
+                switch viewModel.status {
+                case .succese:
+                    switch itunes {
+                    case .all:
+                        Text("aaa")
+                        
+                    case .movie:
+                        List(viewModel.movieResults!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.trackName)
+                                    .padding(.bottom)
+                                
+                                Text(result.artistName)
+                            }
+                        }
+                        
+                    case .podcast:
+                        List(viewModel.podcastResults!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.trackName)
+                                    .padding(.bottom)
+                                
+                                Text(result.collectionName)
+                            }
+                        }
+                        
+                    case .music:
+                        List(viewModel.musicResults!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.trackName)
+                                    .padding(.bottom)
+                                
+                                Text(result.artistName)
+                            }
+                        }
+                        
+                    case .musicVideo:
+                        List(viewModel.musicVideoResults!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.trackName)
+                                    .padding(.bottom)
+                                
+                                Text(result.artistName)
+                            }
+                        }
+                        
+                    case .audiobook:
+                        List(viewModel.audiobookResult!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.artistName)
+                                    .padding(.bottom)
+                                
+                                Text(result.collectionName)
+                            }
+                        }
+                        
+                    case .tvShow:
+                        List(viewModel.tvShowResults!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.artistName)
+                                    .padding(.bottom)
+                                
+                                Text(result.collectionName)
+                            }
+                        }
+                        
+                    case .software:
+                        List(viewModel.softwareResults!, id: \.self) { result in
+                            Text(result.trackName)
+                        }
+                        
+                    case .ebook:
+                        List(viewModel.ebookResults!, id: \.self) { result in
+                            Text(result.trackName)
+                        }
                     }
                     
-                } else {
-                    switch viewModel.status {
-                    case .succese:
-                        switch itunes {
-                        case .all:
-                            Text("aaa")
-                            
-                        case .movie:
-                            List(viewModel.movieResults!, id: \.self) { result in
-                                VStack(alignment: .leading) {
-                                    Text(result.trackName)
-                                        .padding(.bottom)
-                                    
-                                    Text(result.artistName)
-                                }
-                            }
-                            
-                        case .podcast:
-                            Text(category)
-                            
-                        case .music:
-                            Text(category)
-                            
-                        case .musicVideo:
-                            Text(category)
-                            
-                        case .audiobook:
-                            Text(category)
-                            
-                        case .shortFilm:
-                            Text(category)
-                            
-                        case .tvShow:
-                            Text(category)
-                            
-                        case .softWare:
-                            Text(category)
-                            
-                        case .ebook:
-                            List(viewModel.ebookResults!, id: \.self) { result in
-                                Text(result.trackName)
-                            }
-                        }
+                case .failded:
+                    Text("ネットワークに繋がりません")
+                    
+                case .unfinished:
+                    HStack {
+                        Spacer()
+                        ProgressView("検索中")
                         
-                    case .failded:
-                        Text("ネットワークに繋がりません")
-                        
-                    case .unfinished:
-                        HStack {
-                            Spacer()
-                            ProgressView("検索中")
-                            
-                            Spacer()
-                        }
-                       
                         Spacer()
                     }
+                    
+                    Spacer()
                 }
             }
             .navigationTitle(category)
+            .navigationDestination(isPresented: $isSearch) {
+                SearchResultView(viewModel: viewModel,
+                                 term: term,
+                                 media: media,
+                                 itunes: itunes)
+            }
             .toolbar{
                 TextField("検索", text: $term, onCommit: {
                     isSearch = true
                 })
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .frame(minWidth: geometry.size.width / 3)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .frame(minWidth: geometry.size.width / 3)
             }
             .task {
-                print("itunes: \(itunes)")
+                print("itunes: \(itunes) *******")
                 viewModel.search(term: "Apple",
                                  media: media,
                                  itunes: itunes)
