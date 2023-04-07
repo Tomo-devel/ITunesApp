@@ -28,9 +28,15 @@ class SearchViewModel: ObservableObject {
     
     
     @MainActor
+    func initialSearch(categoryArray: [ITunes], term: String) {
+        for category in categoryArray {
+            search(term: term, media: category.rawValue, itunes: category)
+        }
+    }
+    
+    @MainActor
     func search(term: String, media: String, itunes: ITunes) {
         status = .unfinished
-        ebookResults?.removeAll()
         resultCount = 0
         
         guard let url = URL(string: url) else {
@@ -63,6 +69,7 @@ class SearchViewModel: ObservableObject {
             status = .failded
             return
         }
+        
         print(componentURL)
         
         Task {
@@ -74,6 +81,7 @@ class SearchViewModel: ObservableObject {
                 
             case .success(let data):
                 do {
+                    print("aaa")
                     // TODO: breakで処理を飛ばしてるとこを書く
                     switch itunes {
                     case .all:
@@ -82,7 +90,12 @@ class SearchViewModel: ObservableObject {
                         let result = try JSONDecoder().decode(ITunesMovieResult.self, from: data)
                         resultCount = result.resultCount
                         movieResults = result.results
-
+                        
+                    case .tvShow:
+                        let result = try JSONDecoder().decode(ITunesTVShowResult.self, from: data)
+                        resultCount = result.resultCount
+                        tvShowResults = result.results
+                        
                     case .podcast:
                         let result = try JSONDecoder().decode(ITunesPodcastResult.self, from: data)
                         resultCount = result.resultCount
@@ -97,28 +110,24 @@ class SearchViewModel: ObservableObject {
                         let result = try JSONDecoder().decode(ITunesMusicVideoResult.self, from: data)
                         resultCount = result.resultCount
                         musicVideoResults = result.results
-                    
-                    case .audiobook:
-                        let result = try JSONDecoder().decode(ITunesAudiobookResult.self, from: data)
-                        resultCount = result.resultCount
-                        audiobookResult = result.results
-                   
-                    case .tvShow:
-                        let result = try JSONDecoder().decode(ITunesTVShowResult.self, from: data)
-                        resultCount = result.resultCount
-                        tvShowResults = result.results
                         
                     case .software:
                         let result = try JSONDecoder().decode(ITunesSoftwareResult.self, from: data)
                         resultCount = result.resultCount
                         softwareResults = result.results
-                       
+                        
                     case .ebook:
                         let result = try JSONDecoder().decode(ITunesEbookResult.self, from: data)
                         resultCount = result.resultCount
                         ebookResults = result.results
+                        
+                    case .audiobook:
+                        let result = try JSONDecoder().decode(ITunesAudiobookResult.self, from: data)
+                        resultCount = result.resultCount
+                        audiobookResult = result.results
                     }
                     
+                    print("bbb")
                     status = .succese
                     
                 } catch {

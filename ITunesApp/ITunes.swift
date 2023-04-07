@@ -22,6 +22,8 @@ struct ITunesRequest {
 }
 
 
+// TODO: 一つにできないか試す
+
 struct ITunesMovieResult: Decodable {
     let resultCount: Int
     let results: [Result]
@@ -33,7 +35,7 @@ struct ITunesMovieResult: Decodable {
         let trackName: String
         let trackCensoredName: String
         let trackViewUrl: String
-        let previewUrl: String?
+        let previewUrl, collectionArtistViewUrl: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
         let collectionPrice, trackPrice: Int?
         let trackRentalPrice: Int?
@@ -43,7 +45,23 @@ struct ITunesMovieResult: Decodable {
         let releaseDate: String
         let collectionExplicitness, trackExplicitness: String
         let trackTimeMillis: Int?
-        let country, currency, primaryGenreName, longDescription: String
+        let primaryGenreName, longDescription: String
+    }
+}
+
+
+struct ITunesTVShowResult: Decodable {
+    let resultCount: Int
+    let results: [Result]
+    
+    struct Result: Decodable, Hashable {
+        let artistName, collectionName, trackName, collectionCensoredName: String
+        let trackCensoredName: String
+        let artistViewURL, collectionViewURL, trackViewURL: String?
+        let artworkUrl30, artworkUrl60, artworkUrl100: String
+        let releaseDate: String
+        let primaryGenreName: String
+        let shortDescription, longDescription: String
     }
 }
 
@@ -53,15 +71,14 @@ struct ITunesPodcastResult: Decodable {
     let results: [Result]
     
     struct Result: Decodable, Hashable {
-        let collectionName, trackName, collectionCensoredName, trackCensoredName: String
+        let collectionName, artistName, trackName, collectionCensoredName, trackCensoredName: String
         let artistViewURL: String?
         let collectionViewURL: String?
         let feedURL: String?
         let trackViewURL: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
-        let collectionPrice, trackPrice, collectionHdPrice: Int?
+        let collectionPrice, trackPrice, collectionHdPrice: Int
         let releaseDate: String
-        let trackCount: Int
         let trackTimeMillis: Int?
         let primaryGenreName: String
         let artworkUrl600: String
@@ -80,12 +97,12 @@ struct ITunesMusicResult: Decodable {
         let artistViewURL, collectionViewURL, trackViewURL: String?
         let previewURL: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
-        let collectionPrice, trackPrice: Int
+        let collectionPrice, trackPrice: Int?
         let releaseDate: String
-        let discCount, discNumber, trackCount, trackNumber: Int
         let trackTimeMillis: Int
         let isStreamable: Bool
         let collectionArtistName: String?
+        let primaryGenreName: String
     }
 }
 
@@ -105,42 +122,6 @@ struct ITunesMusicVideoResult: Decodable {
         let primaryGenreName: String
         let collectionName, collectionCensoredName: String?
         let collectionViewURL: String?
-        let discCount, discNumber, trackCount, trackNumber: Int?
-    }
-}
-
-
-struct ITunesAudiobookResult: Decodable {
-    let resultCount: Int
-    let results: [Result]
-    
-    struct Result: Decodable, Hashable {
-        let artistName, collectionName, collectionCensoredName: String
-        let artistViewURL, collectionViewURL: String?
-        let artworkUrl60, artworkUrl100: String
-        let collectionPrice: Int
-        let trackCount: Int
-        let copyright: String?
-        let releaseDate: String
-        let primaryGenreName: String
-        let previewURL: String?
-        let description: String
-    }
-}
-
-
-struct ITunesTVShowResult: Decodable {
-    let resultCount: Int
-    let results: [Result]
-    
-    struct Result: Decodable, Hashable {
-        let artistName, collectionName, trackName, collectionCensoredName: String
-        let trackCensoredName: String
-        let artistViewURL, collectionViewURL, trackViewURL: String?
-        let artworkUrl30, artworkUrl60, artworkUrl100: String
-        let releaseDate: String
-        let discCount, discNumber, trackCount, trackNumber: Int
-        let shortDescription, longDescription: String
     }
 }
 
@@ -151,20 +132,19 @@ struct ITunesSoftwareResult: Decodable {
 
     struct Result: Decodable, Hashable {
         let isGameCenterEnabled: Bool
-        let screenshotUrls, ipadScreenshotUrls: [String]
+        let screenshotUrls, ipadScreenshotUrls: [String]?
         let artworkUrl60, artworkUrl512, artworkUrl100: String
-        let artistViewURL: String?
+        let artistViewUrl: String
         let supportedDevices: [String]
         let advisories: [String]
         let genres: [String]
         let price: Int?
         let artistName, primaryGenreName: String
-        let primaryGenreID: Int?
         let description: String
         let releaseDate: String
         let sellerName: String
         let isVppDeviceBasedLicensingEnabled: Bool
-        let minimumOSVersion, trackCensoredName: String?
+        let minimumOsVersion, trackCensoredName: String?
         let languageCodesISO2A: [String]
         let fileSizeBytes: String
         let averageUserRatingForCurrentVersion: Double
@@ -177,6 +157,7 @@ struct ITunesSoftwareResult: Decodable {
         let trackName, version: String
         let userRatingCount: Int
         let sellerURL: String?
+        let contentAdvisoryRating: String
     }
 }
 
@@ -202,3 +183,23 @@ struct ITunesEbookResult: Decodable {
         let averageUserRating: Double?
     }
 }
+
+
+struct ITunesAudiobookResult: Decodable {
+    let resultCount: Int
+    let results: [Result]
+    
+    struct Result: Decodable, Hashable {
+        let artistName, collectionName, collectionCensoredName: String
+        let artistViewURL, collectionViewURL: String?
+        let artworkUrl60, artworkUrl100: String
+        let collectionPrice: Int
+        let trackCount: Int
+        let copyright: String?
+        let releaseDate: String
+        let primaryGenreName: String
+        let previewURL: String?
+        let description: String
+    }
+}
+

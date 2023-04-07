@@ -7,10 +7,15 @@
 
 import SwiftUI
 
+// TODO: Viewが長くなりそうだったら別Viewに分ける
+// TODO: HOMEViewを作る
+
 struct SearchView: View {
     @StateObject var viewModel: SearchViewModel = SearchViewModel()
-    @State var term: String = ""
-    @State var isSearch: Bool = false
+    @State private var term: String = ""
+    @State private var isInitialization: Bool = false
+    @Binding var isSearch: Bool
+    let categoryArray: [ITunes]
     let media: String
     let category: String
     let itunes: ITunes
@@ -18,7 +23,7 @@ struct SearchView: View {
     var body: some View {
         
         GeometryReader { geometry in
-            VStack {
+            VStack(alignment: .leading) {
                 switch viewModel.status {
                 case .succese:
                     switch itunes {
@@ -26,12 +31,32 @@ struct SearchView: View {
                         Text("aaa")
                         
                     case .movie:
-                        List(viewModel.movieResults!, id: \.self) { result in
+                        ScrollView {
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    ForEach(viewModel.movieResults!, id: \.self) { result in
+                                        VStack {
+                                            if let url = URL(string: result.artworkUrl100) {
+                                                AsyncImage(url: url)
+                                                
+                                            } else {
+                                                ProgressView()
+                                            }
+                                            
+                                            Text(result.trackName)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    case .tvShow:
+                        List(viewModel.tvShowResults!, id: \.self) { result in
                             VStack(alignment: .leading) {
-                                Text(result.trackName)
+                                Text(result.artistName)
                                     .padding(.bottom)
                                 
-                                Text(result.artistName)
+                                Text(result.collectionName)
                             }
                         }
                         
@@ -65,26 +90,6 @@ struct SearchView: View {
                             }
                         }
                         
-                    case .audiobook:
-                        List(viewModel.audiobookResult!, id: \.self) { result in
-                            VStack(alignment: .leading) {
-                                Text(result.artistName)
-                                    .padding(.bottom)
-                                
-                                Text(result.collectionName)
-                            }
-                        }
-                        
-                    case .tvShow:
-                        List(viewModel.tvShowResults!, id: \.self) { result in
-                            VStack(alignment: .leading) {
-                                Text(result.artistName)
-                                    .padding(.bottom)
-                                
-                                Text(result.collectionName)
-                            }
-                        }
-                        
                     case .software:
                         List(viewModel.softwareResults!, id: \.self) { result in
                             Text(result.trackName)
@@ -93,6 +98,15 @@ struct SearchView: View {
                     case .ebook:
                         List(viewModel.ebookResults!, id: \.self) { result in
                             Text(result.trackName)
+                        }
+                    case .audiobook:
+                        List(viewModel.audiobookResult!, id: \.self) { result in
+                            VStack(alignment: .leading) {
+                                Text(result.artistName)
+                                    .padding(.bottom)
+                                
+                                Text(result.collectionName)
+                            }
                         }
                     }
                     
@@ -115,20 +129,31 @@ struct SearchView: View {
                 SearchResultView(viewModel: viewModel,
                                  term: term,
                                  media: media,
+                                 screenWidth: geometry.size.width,
+                                 screenHeight: geometry.size.height,
                                  itunes: itunes)
             }
-            .toolbar{
-                TextField("検索", text: $term, onCommit: {
-                    isSearch = true
-                })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .frame(minWidth: geometry.size.width / 3)
+            .searchable(text: $term)
+            .onSubmit(of: .search) {
+                isSearch = true
+                print("term: \(term)、media: \(media)、itunes: \(itunes)")
+                viewModel.search(term: term, media: media, itunes: itunes)
             }
             .task {
                 print("itunes: \(itunes) *******")
-                viewModel.search(term: "Apple",
-                                 media: media,
-                                 itunes: itunes)
+                
+                if !isInitialization {
+                    print("上")
+                    viewModel.initialSearch(categoryArray: categoryArray,
+                                            term: "Apple")
+                    isInitialization = true
+                    
+                } else {
+                    print("した")
+                    viewModel.search(term: "Apple",
+                                     media: media,
+                                     itunes: itunes)
+                }
             }
         }
     }
@@ -136,7 +161,9 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchView(media: "",
+        SearchView(isSearch: .constant(false),
+                   categoryArray: [],
+                   media: "",
                    category: "",
                    itunes: .all)
     }

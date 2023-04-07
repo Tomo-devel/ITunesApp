@@ -10,59 +10,79 @@ import SwiftUI
 enum ITunes: String, CaseIterable {
     case all
     case movie
+    case tvShow
     case podcast
     case music
     case musicVideo
-    case audiobook
-    case tvShow
     case software
     case ebook
+    case audiobook
     
     
-    func changeJP() -> String {
+    func changeJP() -> (String, String) {
         switch self {
         case .all:
-            return "全てから検索"
+            return ("HOME", "house")
         case .movie:
-            return "映画"
-        case .podcast:
-            return "ポッドキャスト"
-        case .music:
-            return "音楽"
-        case .musicVideo:
-            return "ミュージックビデオ"
-        case .audiobook:
-            return "オーディオブック"
+            return ("映画", "popcorn")
         case .tvShow:
-            return "TV"
+            return ("TV", "tv")
+        case .podcast:
+            return ("ポッドキャスト", "radio")
+        case .music:
+            return ("音楽", "music.note.list")
+        case .musicVideo:
+            return ("ミュージックビデオ", "music.note.tv")
         case .software:
-            return "アプリケーション"
+            return ("アプリケーション", "arrow.down.app")
         case .ebook:
-            return "電子書籍"
+            return ("電子書籍", "book")
+        case .audiobook:
+            return ("オーディオブック", "headphones")
         }
     }
 }
 
 struct HomeView: View {
-    @State var selectITunes: ITunes?
+    @State private var selectITunes: ITunes?
+    @State var isSearch: Bool = false
+    @State var isShowSettingView: Bool = false
     
     var body: some View {
         
         NavigationSplitView {
             List(ITunes.allCases, id: \.self, selection: $selectITunes) { itunes in
                 NavigationLink(value: itunes) {
-                    Text(itunes.changeJP())
+                    Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
+                        .foregroundColor(.black)
                 }
             }
+            .disabled(isSearch)
             .navigationTitle("カテゴリー")
+            .toolbar {
+                Button {
+                    isShowSettingView.toggle()
+                    
+                } label: {
+                    Label("setting", systemImage: "gearshape")
+                }
+                .sheet(isPresented: $isShowSettingView) {
+                    NavigationStack {
+                        SettingView(isShowSettingView: $isShowSettingView)
+                    }
+                }
+            }
             
         } detail: {
             NavigationStack {
-                SearchView(media: selectITunes?.rawValue ?? "tvShow",
-                           category: selectITunes?.changeJP() ?? "テレビ",
-                           itunes: selectITunes ?? .tvShow)
+                SearchView(isSearch: $isSearch,
+                           categoryArray: ITunes.allCases,
+                           media: selectITunes?.rawValue ?? "all",
+                           category: selectITunes?.changeJP().0 ?? "HOME",
+                           itunes: selectITunes ?? .all)
             }
         }
+        .preferredColorScheme(.light)
     }
 }
 
