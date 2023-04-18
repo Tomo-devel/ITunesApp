@@ -16,7 +16,6 @@ struct SoftwareView: View {
     @State var ipadScreenshotUrls: [String] = []
     @State var trackName: String = ""
     @State var artistName: String = ""
-    @State var price: Int = 0
     @State var artistUrl: String = ""
     @State var description: String = ""
     @State var primaryGenreName: String = ""
@@ -30,14 +29,17 @@ struct SoftwareView: View {
     @State var contentAdvisoryRating: String = ""
     let itunes: ITunes
     let screenWidth: Double
+    let screenHeight: Double
     let columns: [GridItem]
     
     init(viewModel: SearchViewModel,
          itunes: ITunes,
-         screenWidth: Double) {
+         screenWidth: Double,
+         screenHeight: Double) {
         self.viewModel = viewModel
         self.itunes = itunes
         self.screenWidth = screenWidth
+        self.screenHeight = screenHeight
         self.columns = [GridItem(.flexible()),
                         GridItem(.flexible())]
     }
@@ -48,15 +50,22 @@ struct SoftwareView: View {
             LazyVGrid(columns: columns, alignment: .center) {
                 ForEach(viewModel.softwareResults!, id: \.self) { result in
                     Button {
-                        print("*******\(result.artistViewUrl)")
-                        sample(imageUrl: result.artworkUrl100, smallImageUrl: result.artworkUrl60,
-                               screenshotUrls: result.screenshotUrls ?? [], ipadScreenshotUrls: result.ipadScreenshotUrls ?? [],
-                               trackName: result.trackName, artistName: result.artistName,
-                               price: result.price ?? 0, artistUrl: result.artistViewUrl, videoUrl: nil, description: result.description,
-                               primaryGenreName: result.primaryGenreName, releaseDate: result.releaseDate,
-                               averageUserRating: result.averageUserRating, userRatingCount: result.userRatingCount,
-                               fileSizeBytes: result.fileSizeBytes, languageCodesISO2A: result.languageCodesISO2A,
-                               minimumOsVersion: result.minimumOsVersion!, releaseNotes: result.releaseNotes ?? "",
+                        sample(imageUrl: result.artworkUrl100,
+                               smallImageUrl: result.artworkUrl60,
+                               screenshotUrls: result.screenshotUrls ?? [],
+                               ipadScreenshotUrls: result.ipadScreenshotUrls ?? [],
+                               trackName: result.trackName,
+                               artistName: result.artistName,
+                               artistUrl: result.artistViewUrl,
+                               description: result.description,
+                               primaryGenreName: result.primaryGenreName,
+                               releaseDate: result.releaseDate,
+                               averageUserRating: result.averageUserRating,
+                               userRatingCount: result.userRatingCount,
+                               fileSizeBytes: result.fileSizeBytes,
+                               languageCodesISO2A: result.languageCodesISO2A,
+                               minimumOsVersion: result.minimumOsVersion!,
+                               releaseNotes: result.releaseNotes ?? "",
                                contentAdvisoryRating: result.contentAdvisoryRating)
                         
                         print(artistUrl)
@@ -66,70 +75,95 @@ struct SoftwareView: View {
                     } label: {
                         Card(colour: Color(.systemGray6),
                              opacity: 1)
-                            .overlay {
-                                HStack {
-                                    VStack {
-                                        URLImage(url: result.artworkUrl100,
-                                                 radius: 16.0)
-                                            .padding(.top)
-                                        
-                                        HStack {
-                                            Text("年齢")
-                                                .font(.callout)
-                                            
-                                            Text("\(result.contentAdvisoryRating)")
-                                                .fontWeight(.bold)
-                                                .font(.subheadline)
-                                        }
-                                        .padding()
-                                    }
-                                    .padding(.leading)
+                        .overlay {
+                            HStack {
+                                VStack {
+                                    URLImage(url: result.artworkUrl100,
+                                             radius: 16.0)
+                                    .padding(.top)
                                     
-                                    VStack(alignment: .leading) {
-                                        Text(result.trackName)
-                                            .lineLimit(2)
-                                            .font(.headline)
-                                            .fontWeight(.semibold)
+                                    HStack {
+                                        Text("年齢")
+                                            .font(.callout)
                                         
-                                        Text(result.artistName)
-                                            .lineLimit(1)
-                                            .font(.caption2)
-                                            .padding(.bottom)
-                                        
-                                        Text("\(result.userRatingCount)件の評価")
-                                            .font(.body)
-                                        
-                                        Text("\(String(format: "%.1f", round(result.averageUserRating * 10) / 10))")
-                                            .font(.subheadline)
+                                        Text("\(result.contentAdvisoryRating)")
                                             .fontWeight(.bold)
-                                        
-                                        HStack {
-                                            ForEach(0 ..< 5) { _ in
-                                                Label("rating", systemImage: "star.fill")
-                                                    .labelStyle(IconOnlyLabelStyle())
-                                                    .font(.caption)
-                                            }
-                                        }
+                                            .font(.subheadline)
                                     }
                                     .padding()
-                                    .frame(width: screenWidth / 3, alignment: .leading)
+                                }
+                                .padding(.leading)
+                                
+                                VStack(alignment: .leading) {
+                                    Text(result.trackName)
+                                        .lineLimit(2)
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    
+                                    Text(result.artistName)
+                                        .lineLimit(1)
+                                        .font(.caption2)
+                                        .padding(.bottom)
+                                    
+                                    Text("\(result.userRatingCount)件の評価")
+                                        .font(.body)
+                                    
+                                    Text("\(String(format: "%.1f", round(result.averageUserRating * 10) / 10))")
+                                        .font(.subheadline)
+                                        .fontWeight(.bold)
+                                    
+                                    
+                                    HStack {
+                                        ForEach(0 ..< 5) { star in
+                                            RatingStar(rating: Decimal(result.averageUserRating),
+                                                       colour: .black,
+                                                       star: star)
+                                            .frame(width: screenWidth / 40, height: screenHeight / 40)
+                                            
+                                        }
+                                    }
+                                    
                                 }
                                 .padding()
-                                .scaledToFill()
+                                .frame(width: screenWidth / 3, alignment: .leading)
                             }
-                            .clipped()
+                            .padding()
+                            .scaledToFill()
+                        }
+                        .clipped()
                     }
                     .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $isShowDetailView) {
-                        DetailView(viewModel: viewModel, isShowDetailView: $isShowDetailView, itunes: itunes,
-                                   imageUrl: imageUrl, smallImageUrl: smallImageUrl, screenshotUrls: screenshotUrls,
-                                   ipadScreenshotUrls: ipadScreenshotUrls, trackName: trackName,
-                                   artistName: artistName, price: price, artistUrl: artistUrl,
-                                   videoUrl: nil, longDescription: description, primaryGenreName: primaryGenreName,
-                                   releaseDate: releaseDate, trackTimeMillis: nil, averageUserRating: averageUserRating,
-                                   userRatingCount: userRatingCount, fileSizeBytes: fileSizeBytes, languageCodesISO2A: languageCodesISO2A,
-                                   minimumOsVersion: minimumOsVersion, releaseNotes: releaseNotes,
-                                   contentAdvisoryRating: contentAdvisoryRating)
+                        DetailView(viewModel: viewModel,
+                                   isShowDetailView: $isShowDetailView,
+                                   imageUrl: $imageUrl,
+                                   smallImageUrl: $smallImageUrl,
+                                   screenshotUrls: Binding($screenshotUrls),
+                                   ipadScreenshotUrls: Binding($ipadScreenshotUrls),
+                                   trackName: $trackName,
+                                   artistName: $artistName,
+                                   collectionName: .constant(nil),
+                                   trackPrice: .constant(nil),
+                                   collectionPrice: .constant(nil),
+                                   artistUrl: Binding($artistUrl),
+                                   trackUrl: .constant(nil),
+                                   videoUrl: .constant(nil),
+                                   collectionUrl: .constant(nil),
+                                   longDescription: Binding($description),
+                                   primaryGenreName: Binding($primaryGenreName),
+                                   releaseDate: $releaseDate,
+                                   trackTimeMillis: .constant(nil),
+                                   averageUserRating: Binding($averageUserRating),
+                                   userRatingCount: Binding($userRatingCount),
+                                   fileSizeBytes: Binding($fileSizeBytes),
+                                   languageCodesISO2A: Binding($languageCodesISO2A),
+                                   minimumOsVersion: Binding($minimumOsVersion),
+                                   releaseNotes: Binding($releaseNotes),
+                                   contentAdvisoryRating: Binding($contentAdvisoryRating),
+                                   genres: .constant(nil),
+                                   itunes: itunes,
+                                   screenWidth: screenWidth,
+                                   screenHeight: screenHeight)
                     }
                 }
             }
@@ -139,8 +173,7 @@ struct SoftwareView: View {
     
     func sample(imageUrl: String, smallImageUrl: String, screenshotUrls: [String],
                 ipadScreenshotUrls: [String], trackName: String, artistName: String,
-                price: Int, artistUrl: String, videoUrl: String?,
-                description: String, primaryGenreName: String,
+                artistUrl: String, description: String, primaryGenreName: String,
                 releaseDate: String, averageUserRating: Double, userRatingCount: Int,
                 fileSizeBytes: String, languageCodesISO2A: [String], minimumOsVersion: String,
                 releaseNotes: String, contentAdvisoryRating: String) {
@@ -150,7 +183,6 @@ struct SoftwareView: View {
         self.ipadScreenshotUrls = ipadScreenshotUrls
         self.trackName = trackName
         self.artistName = artistName
-        self.price = price
         self.artistUrl = artistUrl
         self.description = description
         self.primaryGenreName = primaryGenreName
@@ -169,6 +201,7 @@ struct SoftwareView_Previews: PreviewProvider {
     static var previews: some View {
         SoftwareView(viewModel: SearchViewModel(),
                      itunes: .all,
-                     screenWidth: 0.0)
+                     screenWidth: 0.0,
+                     screenHeight: 0.0)
     }
 }

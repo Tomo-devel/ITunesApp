@@ -11,7 +11,7 @@ struct MovieDetailView: View {
     let image: String
     let title: String
     let artist: String
-    let price: Int?
+    let trackPrice: String?
     let videoUrl: String?
     let longDescription: String?
     let primaryGenreName: String
@@ -32,8 +32,8 @@ struct MovieDetailView: View {
                     Text(artist)
                             .padding(.bottom)
                     
-                    if let price {
-                        Text("￥\(price)")
+                    if let trackPrice {
+                        Text("￥\(trackPrice)")
                         
                     } else {
                         Text("￥０")
@@ -41,7 +41,9 @@ struct MovieDetailView: View {
                 }
                 .padding(.horizontal)
             }
-            .padding(.bottom)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color(.systemGray6))
             
             Divider()
             ScrollView {
@@ -74,30 +76,47 @@ struct MovieDetailView: View {
                 Divider()
                     .padding(.leading)
                 
-                HStack {
-                    VStack(alignment: .trailing) {
+                VStack {
+                    HStack {
                         Text("監督：")
+                        
+                        Spacer()
+                        Text(artist)
+                    }
+                    
+                    HStack {
                         Text("ジャンル：")
+                        
+                        Spacer()
+                        Text(primaryGenreName)
+                    }
+                    
+                    HStack {
                         Text("リリース：")
+                        
+                        Spacer()
+                        Text(releaseDate)
+                    }
+                    
+                    HStack {
                         Text("再生時間：")
+                        
+                        Spacer()
+                        Text(trackTimeMillis)
                     }
-                    
-                    VStack(alignment: .leading) {
-                        Text("\(artist)")
-                        Text("\(primaryGenreName)")
-                        Text("\(releaseDate)")
-                        Text("\(trackTimeMillis)")
-                    }
-                    
-                    Spacer()
                 }
                 .padding()
-                
             }
-            .padding(.bottom)
+            .padding()
         }
+        .padding()
     }
 }
+
+//
+//
+//
+//
 
 //struct MovieDeitailView_Previews: PreviewProvider {
 //    static var previews: some View {

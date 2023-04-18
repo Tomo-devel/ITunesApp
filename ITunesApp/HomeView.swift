@@ -60,15 +60,17 @@ struct HomeView: View {
             .disabled(isSearch)
             .navigationTitle("カテゴリー")
             .toolbar {
-                Button {
-                    isShowSettingView.toggle()
-                    
-                } label: {
-                    Label("setting", systemImage: "gearshape")
-                }
-                .sheet(isPresented: $isShowSettingView) {
-                    NavigationStack {
-                        SettingView(isShowSettingView: $isShowSettingView)
+                ToolbarItem {
+                    Button {
+                        isShowSettingView.toggle()
+                        
+                    } label: {
+                        Label("setting", systemImage: "gearshape")
+                    }
+                    .sheet(isPresented: $isShowSettingView) {
+                        NavigationStack {
+                            SettingView(isShowSettingView: $isShowSettingView)
+                        }
                     }
                 }
             }

@@ -10,82 +10,168 @@ import SwiftUI
 struct DetailView: View {
     @ObservedObject var viewModel: SearchViewModel
     @Binding var isShowDetailView: Bool
+    @Binding var imageUrl: String
+    @Binding var smallImageUrl: String
+    @Binding var screenshotUrls: [String]?
+    @Binding var ipadScreenshotUrls: [String]?
+    @Binding var trackName: String
+    @Binding var artistName: String
+    @Binding var collectionName: String?
+    @Binding var trackPrice: String?
+    @Binding var collectionPrice: String?
+    @Binding var artistUrl: String?
+    @Binding var trackUrl: String?
+    @Binding var videoUrl: String?
+    @Binding var collectionUrl: String?
+    @Binding var longDescription: String?
+    @Binding var primaryGenreName: String?
+    @Binding var releaseDate: String
+    @Binding var trackTimeMillis: Int?
+    @Binding var averageUserRating: Double?
+    @Binding var userRatingCount: Int?
+    @Binding var fileSizeBytes: String?
+    @Binding var languageCodesISO2A: [String]?
+    @Binding var minimumOsVersion: String?
+    @Binding var releaseNotes: String?
+    @Binding var contentAdvisoryRating: String?
+    @Binding var genres: [String]?
     let itunes: ITunes
-    let imageUrl: String
-    let smallImageUrl: String
-    let screenshotUrls: [String]
-    let ipadScreenshotUrls: [String]
-    let trackName: String
-    let artistName: String
-    let price: Int?
-    let artistUrl: String?
-    let videoUrl: String?
-    let longDescription: String?
-    let primaryGenreName: String
-    let releaseDate: String
-    let trackTimeMillis: Int?
-    let averageUserRating: Double
-    let userRatingCount: Int
-    let fileSizeBytes: String
-    let languageCodesISO2A: [String]
-    let minimumOsVersion: String
-    let releaseNotes: String
-    let contentAdvisoryRating: String
+    let screenWidth: Double
+    let screenHeight: Double
     
     var body: some View {
         
-        VStack {
-            switch itunes {
-            case .all:
-                Text("home")
-            case .movie:
-                NavigationStack {
+        NavigationStack {
+            VStack {
+                switch itunes {
+                case .all:
+                    Text("home")
+                case .movie:
                     MovieDetailView(image: imageUrl,
                                     title: trackName,
                                     artist: artistName,
-                                    price: price,
+                                    trackPrice: String(trackPrice ?? ""),
                                     videoUrl: videoUrl,
                                     longDescription: longDescription,
-                                    primaryGenreName: primaryGenreName,
-                                    releaseDate: dateFomatter(String(releaseDate.prefix(10))),
+                                    primaryGenreName: primaryGenreName ?? "",
+                                    releaseDate: String(releaseDate.prefix(10)),
                                     trackTimeMillis: msToS(trackTimeMillis))
+                    
+                case .tvShow:
+                    TVDetailView(imageUrl: imageUrl,
+                                 artistName: artistName,
+                                 trackName: trackName,
+                                 collectionName: collectionName ?? "",
+                                 artistUrl: artistUrl,
+                                 trackUrl: trackUrl,
+                                 collectionUrl: collectionUrl,
+                                 releaseDate: String(releaseDate.prefix(10)),
+                                 primaryGenreName: primaryGenreName ?? "",
+                                 constetAdvisoryRating: contentAdvisoryRating ?? "",
+                                 longDescription: longDescription ?? "")
+                    
+                case .podcast:
+                    PodcastDetailView(imageUrl: imageUrl,
+                                      artistName: artistName,
+                                      trackName: trackName,
+                                      collectionName: collectionName ?? "",
+                                      trackUrl: trackUrl,
+                                      collectionUrl: collectionUrl,
+                                      trackPrice: trackPrice ?? "",
+                                      collectionPrice: collectionPrice ?? "",
+                                      releaseDate: String(releaseDate.prefix(10)),
+                                      trackTimeMillis: msToS(trackTimeMillis),
+                                      genres: genres ?? [])
+                    
+                case .music:
+                    MusicDetailView(imageUrl: imageUrl,
+                                    trackName: trackName,
+                                    artistName: artistName,
+                                    collectionName: collectionName,
+                                    artistUrl: artistUrl,
+                                    collectionUrl: collectionUrl,
+                                    videoUrl: videoUrl,
+                                    trackPrice: trackPrice ?? "",
+                                    collectionPrice: collectionPrice ?? "",
+                                    releaseDate: String(releaseDate.prefix(10)),
+                                    trackTimeMilis: msToS(trackTimeMillis),
+                                    primaryGenreName: primaryGenreName ?? "")
+                    
+                case .musicVideo:
+                    MusicVideoDetailView(imageUrl: imageUrl,
+                                         artistName: artistName,
+                                         trackName: trackName,
+                                         colletionName: collectionName ?? "",
+                                         artistUrl: artistUrl,
+                                         trackUrl: trackUrl,
+                                         collectionUrl: collectionUrl,
+                                         videoUrl: videoUrl,
+                                         trackPrice: trackPrice,
+                                         collectionPrice: collectionPrice,
+                                         releaseDate: String(releaseDate.prefix(10)),
+                                         trackTimeMillis: msToS(trackTimeMillis),
+                                         primaryGenreName: primaryGenreName ?? "")
+                    
+                case .software:
+                    SoftwareDetailView(imageUrl: imageUrl,
+                                       screenshotUrls: screenshotUrls ?? [],
+                                       ipadScreenshotUrls: ipadScreenshotUrls ?? [],
+                                       smallImageUrl: smallImageUrl,
+                                       trackName: trackName,
+                                       artistName: artistName,
+                                       artistUrl: artistUrl!,
+                                       averageUserRating: averageUserRating ?? 0.0,
+                                       userRatingCount: userRatingCount ?? 0,
+                                       fileSizeBytes: byteFormatter(value: fileSizeBytes ?? ""),
+                                       languageCodesISO2A: languageCodesISO2A ?? [],
+                                       minimumOsVersion: minimumOsVersion ?? "",
+                                       description: longDescription ?? "",
+                                       releaseNotes: releaseNotes ?? "",
+                                       contentAdvisoryRating: contentAdvisoryRating ?? "",
+                                       primaryGenreName: primaryGenreName ?? "",
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                    
+                case .ebook:
+                    EbookDetailView(imageUrl: imageUrl,
+                                    artistName: artistName,
+                                    trackName: trackName,
+                                    artistUrl: artistUrl ?? "",
+                                    trackUrl: trackUrl ?? "",
+                                    price: trackPrice ?? "0",
+                                    description: longDescription ?? "",
+                                    releaseDate: String(releaseDate.prefix(10)),
+                                    genres: genres ?? [],
+                                    userRatingCount: userRatingCount ?? 0,
+                                    averageUserRating: averageUserRating ?? 0.0,
+                                    screenWidth: screenWidth,
+                                    screenHeight: screenHeight)
+                    
+                case .audiobook:
+                    AudiobookDetailView(imageUrl: imageUrl,
+                                        collectionName: collectionName ?? "",
+                                        artistName: artistName,
+                                        collectionUrl: collectionUrl,
+                                        artistUrl: artistUrl,
+                                        videoUrl: videoUrl,
+                                        collectionPrice: collectionPrice ?? "",
+                                        releaseDate: String(releaseDate.prefix(10)),
+                                        primaryGenreName: primaryGenreName ?? "",
+                                        description: longDescription ?? "")
+                    
                 }
-               
-            case .tvShow:
-                Text("tvshow")
-            case .podcast:
-                Text("podcast")
-            case .music:
-                Text("music")
-            case .musicVideo:
-                Text("muiscvideo")
-            case .software:
-                NavigationStack {
-                    SoftwareDetailView(imageUrl: imageUrl, screenshotUrls: screenshotUrls, ipadScreenshotUrls: ipadScreenshotUrls, smallImageUrl: smallImageUrl, trackName: trackName, artistName: artistName, artistUrl: artistUrl!,
-                                       averageUserRating: averageUserRating, userRatingCount: userRatingCount,
-                                       fileSizeBytes: byteFormatter(value: fileSizeBytes), languageCodesISO2A: languageCodesISO2A,
-                                       minimumOsVersion: minimumOsVersion, description: longDescription ?? "",
-                                       releaseNotes: releaseNotes, contentAdvisoryRating: contentAdvisoryRating,
-                                       primaryGenreName: primaryGenreName)
+            }
+            .toolbar {
+                Button {
+                    isShowDetailView.toggle()
+                    
+                } label: {
+                    Text("完了")
                 }
-                
-            case .ebook:
-                Text("ebook")
-            case .audiobook:
-                Text("audiobook")
-                
             }
-        }
-        .toolbar {
-            Button {
-                isShowDetailView.toggle()
-                
-            } label: {
-                Text("完了")
+            .task {
+                print("*****\(imageUrl)")
             }
-        }
-        .task {
-            print("*****\(imageUrl)")
         }
     }
     
@@ -95,7 +181,7 @@ struct DetailView: View {
             let time: TimeInterval = TimeInterval(value / 1000)
             let dateFormatter = DateComponentsFormatter()
             dateFormatter.unitsStyle = .full
-            dateFormatter.allowedUnits = [.hour, .minute]
+            dateFormatter.allowedUnits = [.hour, .minute, .second]
             
             return dateFormatter.string(from: time)!
             
@@ -121,9 +207,9 @@ struct DetailView: View {
         byteCountFormatter.allowedUnits = [.useKB, .useMB, .useGB]
         byteCountFormatter.isAdaptive = true
         byteCountFormatter.zeroPadsFractionDigits = true
-
+        
         let byte = Measurement<UnitInformationStorage>(value: value, unit: .bytes)
-
+        
         byteCountFormatter.countStyle = .binary
         return byteCountFormatter.string(from: byte)
     }

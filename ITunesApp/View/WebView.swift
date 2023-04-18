@@ -13,7 +13,11 @@ struct WebView: UIViewRepresentable {
     
     
     func makeUIView(context: Context) -> WKWebView {
-           WKWebView()
+        let config = WKWebViewConfiguration()
+        config.allowsInlineMediaPlayback = true
+        config.mediaTypesRequiringUserActionForPlayback = []
+        
+        return WKWebView(frame: .zero, configuration: config)
     }
     
     func updateUIView(_ uiView: WKWebView, context: Context) {
@@ -21,7 +25,8 @@ struct WebView: UIViewRepresentable {
         guard let url = URL(string: url) else {
             return
         }
-        
+
+        uiView.configuration.mediaTypesRequiringUserActionForPlayback = []
         uiView.load(URLRequest(url: url))
     }
 }

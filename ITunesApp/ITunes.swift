@@ -57,10 +57,11 @@ struct ITunesTVShowResult: Decodable {
     struct Result: Decodable, Hashable {
         let artistName, collectionName, trackName, collectionCensoredName: String
         let trackCensoredName: String
-        let artistViewURL, collectionViewURL, trackViewURL: String?
+        let artistViewUrl, collectionViewUrl, trackViewUrl: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
         let releaseDate: String
         let primaryGenreName: String
+        let constetAdvisoryRating: String?
         let shortDescription, longDescription: String
     }
 }
@@ -72,16 +73,15 @@ struct ITunesPodcastResult: Decodable {
     
     struct Result: Decodable, Hashable {
         let collectionName, artistName, trackName, collectionCensoredName, trackCensoredName: String
-        let artistViewURL: String?
-        let collectionViewURL: String?
+        let artistViewUrl: String?
+        let collectionViewUrl: String?
         let feedURL: String?
-        let trackViewURL: String?
-        let artworkUrl30, artworkUrl60, artworkUrl100: String
+        let trackViewUrl: String?
+        let artworkUrl30, artworkUrl60, artworkUrl100, artworkUrl600: String
         let collectionPrice, trackPrice, collectionHdPrice: Int
         let releaseDate: String
         let trackTimeMillis: Int?
         let primaryGenreName: String
-        let artworkUrl600: String
         let genres: [String]
     }
 }
@@ -92,15 +92,18 @@ struct ITunesMusicResult: Decodable {
     let results: [Result]
     
     struct Result: Decodable, Hashable {
-        let artistName, collectionName, trackName, collectionCensoredName: String
-        let trackCensoredName: String
-        let artistViewURL, collectionViewURL, trackViewURL: String?
-        let previewURL: String?
+        let artistName: String
+        let collectionName: String?
+        let trackName: String
+        let collectionCensoredName: String?
+        let trackCensoredName: String?
+        let artistViewUrl, collectionViewUrl, trackViewUrl: String?
+        let previewUrl: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
         let collectionPrice, trackPrice: Int?
         let releaseDate: String
         let trackTimeMillis: Int
-        let isStreamable: Bool
+        let isStreamable: Bool?
         let collectionArtistName: String?
         let primaryGenreName: String
     }
@@ -113,15 +116,15 @@ struct ITunesMusicVideoResult: Decodable {
     
     struct Result: Decodable, Hashable {
         let artistName, trackName, trackCensoredName: String
-        let artistViewURL, trackViewURL: String?
-        let previewURL: String?
+        let artistViewUrl, trackViewUrl: String?
+        let previewUrl: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
         let collectionPrice, trackPrice: Int?
         let releaseDate: String
         let trackTimeMillis: Int?
         let primaryGenreName: String
         let collectionName, collectionCensoredName: String?
-        let collectionViewURL: String?
+        let collectionViewUrl: String?
     }
 }
 
@@ -169,7 +172,7 @@ struct ITunesEbookResult: Decodable {
     struct Result: Decodable, Hashable {
         let artistName: String
         let genres: [String]
-        let price: Int
+        let formattedPrice: String?
         let description: String
         let releaseDate: String
         let trackName: String
@@ -177,7 +180,6 @@ struct ITunesEbookResult: Decodable {
         let artworkUrl100: String
         let artistViewUrl: String
         let trackCensoredName: String
-        let fileSizeBytes: Int
         let trackViewUrl: String
         let userRatingCount: Int?
         let averageUserRating: Double?
@@ -191,14 +193,14 @@ struct ITunesAudiobookResult: Decodable {
     
     struct Result: Decodable, Hashable {
         let artistName, collectionName, collectionCensoredName: String
-        let artistViewURL, collectionViewURL: String?
+        let artistViewUrl, collectionViewUrl: String?
         let artworkUrl60, artworkUrl100: String
         let collectionPrice: Int
         let trackCount: Int
         let copyright: String?
         let releaseDate: String
         let primaryGenreName: String
-        let previewURL: String?
+        let previewUrl: String?
         let description: String
     }
 }

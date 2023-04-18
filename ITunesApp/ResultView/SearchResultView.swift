@@ -45,34 +45,50 @@ struct SearchResultView: View {
                     case .movie:
                         MovieView(viewModel: viewModel,
                                   screenWidth: screenWidth,
+                                  screenHeigth: screenHeight,
                                   itunes: itunes)
                         
                     case .tvShow:
                         TVView(viewModel: viewModel,
-                               screenWidth: screenWidth)
+                               itunes: itunes,
+                               screenWidth: screenWidth,
+                               screenHeigth: screenHeight)
                         
                     case .podcast:
                         PodcastView(viewModel: viewModel,
-                                    screenWidth: screenWidth)
+                                    itunes: itunes,
+                                    screenWidth: screenWidth,
+                                    screenHeigth: screenHeight)
                         
                     case .music:
-                        MusicView(viewModel: viewModel)
+                        MusicView(viewModel: viewModel,
+                                  itunes: itunes,
+                                  screenWidth: screenWidth,
+                                  screenHeight: screenHeight)
                         
                     case .musicVideo:
                         MusicVideoView(viewModel: viewModel,
-                                       screenWidth: screenWidth)
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeigth: screenHeight)
                         
                     case .software:
                         SoftwareView(viewModel: viewModel,
                                      itunes: itunes,
-                                     screenWidth: screenWidth)
+                                     screenWidth: screenWidth,
+                                     screenHeight: screenHeight)
                         
                     case .ebook:
-                        EbookView(viewModel: viewModel)
+                        EbookView(viewModel: viewModel,
+                                  ituens: itunes,
+                                  screenWidth: screenWidth,
+                                  screenHeight: screenHeight)
                         
                     case .audiobook:
                         AudiobookView(viewModel: viewModel,
-                                   screenWidth: screenWidth)
+                                      itunes: itunes,
+                                      screenWidth: screenWidth,
+                                      screenHeigth: screenHeight)
                     }
                     
                 } else {

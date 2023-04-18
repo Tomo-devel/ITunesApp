@@ -9,13 +9,32 @@ import SwiftUI
 
 struct AudiobookView: View {
     @ObservedObject var viewModel: SearchViewModel
+    @State var isShowDetailView: Bool = false
+    @State var imageUrl: String = ""
+    @State var smallImageUrl: String = ""
+    @State var trackName: String = ""
+    @State var collectionName: String = ""
+    @State var artistName: String = ""
+    @State var collectionUrl: String = ""
+    @State var artistUrl: String = ""
+    @State var videoUrl: String = ""
+    @State var collectionPrice: String = ""
+    @State var releaseDate: String = ""
+    @State var primaryGenreName: String = ""
+    @State var description: String = ""
+    let itunes: ITunes
     let screenWidth: Double
+    let screenHeight: Double
     let columns: [GridItem]
     
     init(viewModel: SearchViewModel,
-         screenWidth: Double) {
+         itunes: ITunes,
+         screenWidth: Double,
+         screenHeigth: Double) {
         self.viewModel = viewModel
+        self.itunes = itunes
         self.screenWidth = screenWidth
+        self.screenHeight = screenHeigth
         self.columns = [GridItem(.flexible()),
                         GridItem(.flexible())]
     }
@@ -26,7 +45,21 @@ struct AudiobookView: View {
             LazyVGrid(columns: columns, alignment: .center) {
                 ForEach(viewModel.audiobookResult!, id: \.self) { result in
                     Button {
-                        // TODO: 詳細に遷移する処理
+                        sample(imageUrl: result.artworkUrl100,
+                               smallImageUrl: result.artworkUrl60,
+                               trackName: "",
+                               collectionName: result.collectionName,
+                               artistName: result.artistName,
+                               collectionUrl: result.collectionViewUrl ?? "",
+                               artistUrl: result.artistViewUrl ?? "",
+                               videoUrl: result.previewUrl ?? "",
+                               collectionPrice: String(result.collectionPrice),
+                               releaseDate: result.releaseDate,
+                               primaryGenreName: result.primaryGenreName,
+                               description: result.description)
+                        
+                        isShowDetailView.toggle()
+                        
                     } label: {
                         Card(colour: .orange,
                              opacity: 0.2)
@@ -64,15 +97,67 @@ struct AudiobookView: View {
                             .clipped()
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .sheet(isPresented: $isShowDetailView) {
+                        DetailView(viewModel: viewModel,
+                                   isShowDetailView: $isShowDetailView,
+                                   imageUrl: $imageUrl,
+                                   smallImageUrl: $smallImageUrl,
+                                   screenshotUrls: .constant(nil),
+                                   ipadScreenshotUrls: .constant(nil),
+                                   trackName: $trackName,
+                                   artistName: $artistName,
+                                   collectionName: Binding($collectionName),
+                                   trackPrice: .constant(nil),
+                                   collectionPrice: Binding($collectionPrice),
+                                   artistUrl: Binding($artistUrl),
+                                   trackUrl: .constant(nil),
+                                   videoUrl: Binding($videoUrl),
+                                   collectionUrl: Binding($collectionUrl),
+                                   longDescription: Binding($description),
+                                   primaryGenreName: Binding($primaryGenreName),
+                                   releaseDate: $releaseDate,
+                                   trackTimeMillis: .constant(nil),
+                                   averageUserRating: .constant(nil),
+                                   userRatingCount: .constant(nil),
+                                   fileSizeBytes: .constant(nil),
+                                   languageCodesISO2A: .constant(nil),
+                                   minimumOsVersion: .constant(nil),
+                                   releaseNotes: .constant(nil),
+                                   contentAdvisoryRating: .constant(nil),
+                                   genres: .constant(nil),
+                                   itunes: itunes,
+                                   screenWidth: screenWidth,
+                                   screenHeight: screenHeight)
+                    }
                 }
             }
         }
+    }
+    
+    func sample(imageUrl: String, smallImageUrl: String, trackName: String, collectionName: String,
+                artistName: String, collectionUrl: String, artistUrl: String,
+                videoUrl: String, collectionPrice: String, releaseDate: String,
+                primaryGenreName: String, description: String) {
+        self.imageUrl = imageUrl
+        self.smallImageUrl = smallImageUrl
+        self.trackName = trackName
+        self.collectionName = collectionName
+        self.artistName = artistName
+        self.collectionUrl = collectionUrl
+        self.artistUrl = artistUrl
+        self.videoUrl = videoUrl
+        self.collectionPrice = collectionPrice
+        self.releaseDate = releaseDate
+        self.primaryGenreName = primaryGenreName
+        self.description = description
     }
 }
 
 struct AudiobookView_Previews: PreviewProvider {
     static var previews: some View {
         AudiobookView(viewModel: SearchViewModel(),
-                      screenWidth: 0.0)
+                      itunes: .audiobook,
+                      screenWidth: 0.0,
+                      screenHeigth: 0.0)
     }
 }

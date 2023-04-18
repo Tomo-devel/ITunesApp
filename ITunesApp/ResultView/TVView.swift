@@ -9,13 +9,32 @@ import SwiftUI
 
 struct TVView: View {
     @ObservedObject var viewModel: SearchViewModel
+    @State var isShowDetailView: Bool = false
+    @State var imageUrl: String = ""
+    @State var smallImageUrl: String = ""
+    @State var artistName: String = ""
+    @State var trackName: String = ""
+    @State var collectionName: String = ""
+    @State var artistUrl: String = ""
+    @State var trackUrl: String = ""
+    @State var collectionUrl: String = ""
+    @State var releaseDate: String = ""
+    @State var primaryGenreName: String = ""
+    @State var constetAdvisoryRating: String = ""
+    @State var longDescription: String = ""
+    let itunes: ITunes
     let screenWidth: Double
+    let screenHeight: Double
     let columns: [GridItem]
 
     init(viewModel: SearchViewModel,
-         screenWidth: Double) {
+         itunes: ITunes,
+         screenWidth: Double,
+         screenHeigth: Double) {
         self.viewModel = viewModel
+        self.itunes = itunes
         self.screenWidth = screenWidth
+        self.screenHeight = screenHeigth
         self.columns = [GridItem(.fixed(screenWidth / 2)),
                         GridItem(.fixed(screenWidth / 2))]
     }
@@ -26,7 +45,20 @@ struct TVView: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.tvShowResults!, id: \.self) { result in
                     Button {
-                        // TODO: 詳細を表示するVIEWに遷移させる処理
+                        sample(imageUrl: result.artworkUrl100,
+                               smallImageUrl: result.artworkUrl60,
+                               artistName: result.artistName,
+                               trackName: result.trackName,
+                               collectionName: result.collectionName,
+                               artistUrl: result.artistViewUrl ?? "",
+                               trackUrl: result.trackViewUrl ?? "",
+                               collectionUrl: result.collectionViewUrl ?? "",
+                               releaseDate: result.releaseDate,
+                               primaryGenreName: result.primaryGenreName,
+                               constetAdvisoryRating: result.constetAdvisoryRating ?? "",
+                               longDescription: result.longDescription)
+                        
+                        isShowDetailView.toggle()
                         
                     } label: {
                         HStack {
@@ -48,16 +80,67 @@ struct TVView: View {
                         .padding()
                     }
                     .buttonStyle(.plain)
+                    .sheet(isPresented: $isShowDetailView) {
+                        DetailView(viewModel: viewModel,
+                                   isShowDetailView: $isShowDetailView,
+                                   imageUrl: $imageUrl,
+                                   smallImageUrl: $smallImageUrl,
+                                   screenshotUrls: .constant(nil),
+                                   ipadScreenshotUrls: .constant(nil),
+                                   trackName: $trackName,
+                                   artistName: $artistName,
+                                   collectionName: Binding($collectionName),
+                                   trackPrice: .constant(nil),
+                                   collectionPrice: .constant(nil),
+                                   artistUrl: Binding($artistUrl),
+                                   trackUrl: Binding($trackUrl),
+                                   videoUrl: .constant(nil),
+                                   collectionUrl: Binding($collectionUrl),
+                                   longDescription: Binding($longDescription),
+                                   primaryGenreName: Binding($primaryGenreName),
+                                   releaseDate: $releaseDate,
+                                   trackTimeMillis: .constant(nil),
+                                   averageUserRating: .constant(nil),
+                                   userRatingCount: .constant(nil),
+                                   fileSizeBytes: .constant(nil),
+                                   languageCodesISO2A: .constant(nil),
+                                   minimumOsVersion: .constant(nil),
+                                   releaseNotes: .constant(nil),
+                                   contentAdvisoryRating: Binding($constetAdvisoryRating),
+                                   genres: .constant(nil),
+                                   itunes: itunes,
+                                   screenWidth: screenWidth,
+                                   screenHeight: screenHeight)
+                    }
                 }
             }
         }
         .padding()
+    }
+    
+    func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,
+                collectionName: String, artistUrl: String, trackUrl: String, collectionUrl: String,
+                releaseDate: String, primaryGenreName: String, constetAdvisoryRating: String, longDescription: String) {
+        self.imageUrl = imageUrl
+        self.smallImageUrl = smallImageUrl
+        self.artistName = artistName
+        self.trackName = trackName
+        self.collectionName = collectionName
+        self.artistUrl = artistUrl
+        self.trackUrl = trackUrl
+        self.collectionUrl = collectionUrl
+        self.releaseDate = releaseDate
+        self.primaryGenreName = primaryGenreName
+        self.constetAdvisoryRating = constetAdvisoryRating
+        self.longDescription = longDescription
     }
 }
 
 struct TVView_Previews: PreviewProvider {
     static var previews: some View {
         TVView(viewModel: SearchViewModel(),
-               screenWidth: 0.0)
+               itunes: .tvShow,
+               screenWidth: 0.0,
+               screenHeigth: 0.0)
     }
 }
