@@ -113,10 +113,6 @@ struct MovieDetailView: View {
     }
 }
 
-//
-//
-//
-//
 
 //struct MovieDeitailView_Previews: PreviewProvider {
 //    static var previews: some View {

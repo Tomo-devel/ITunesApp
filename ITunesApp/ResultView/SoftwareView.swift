@@ -112,7 +112,6 @@ struct SoftwareView: View {
                                         .font(.subheadline)
                                         .fontWeight(.bold)
                                     
-                                    
                                     HStack {
                                         ForEach(0 ..< 5) { star in
                                             RatingStar(rating: Decimal(result.averageUserRating),
@@ -122,7 +121,6 @@ struct SoftwareView: View {
                                             
                                         }
                                     }
-                                    
                                 }
                                 .padding()
                                 .frame(width: screenWidth / 3, alignment: .leading)
@@ -200,7 +198,7 @@ struct SoftwareView: View {
 struct SoftwareView_Previews: PreviewProvider {
     static var previews: some View {
         SoftwareView(viewModel: SearchViewModel(),
-                     itunes: .all,
+                     itunes: .movie,
                      screenWidth: 0.0,
                      screenHeight: 0.0)
     }

@@ -44,8 +44,6 @@ struct DetailView: View {
         NavigationStack {
             VStack {
                 switch itunes {
-                case .all:
-                    Text("home")
                 case .movie:
                     MovieDetailView(image: imageUrl,
                                     title: trackName,

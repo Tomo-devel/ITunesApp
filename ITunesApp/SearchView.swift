@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// TODO: Viewが長くなりそうだったら別Viewに分ける
-// TODO: HOMEViewを作る
-
 struct SearchView: View {
     @StateObject var viewModel: SearchViewModel = SearchViewModel()
     @State private var term: String = ""
@@ -27,9 +24,6 @@ struct SearchView: View {
                 switch viewModel.status {
                 case .succese:
                     switch itunes {
-                    case .all:
-                        Text("aaa")
-                        
                     case .movie:
                         ScrollView {
                             ScrollView(.horizontal) {
@@ -165,6 +159,6 @@ struct SearchView_Previews: PreviewProvider {
                    categoryArray: [],
                    media: "",
                    category: "",
-                   itunes: .all)
+                   itunes: .movie)
     }
 }

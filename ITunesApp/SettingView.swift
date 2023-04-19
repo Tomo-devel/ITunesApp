@@ -22,7 +22,6 @@ struct SettingView: View {
                     } label: {
                         Text("履歴")
                     }
-
                     
                 } header: {
                     Text("履歴")

@@ -81,11 +81,7 @@ class SearchViewModel: ObservableObject {
                 
             case .success(let data):
                 do {
-                    print("aaa")
-                    // TODO: breakで処理を飛ばしてるとこを書く
                     switch itunes {
-                    case .all:
-                        break
                     case .movie:
                         let result = try JSONDecoder().decode(ITunesMovieResult.self, from: data)
                         resultCount = result.resultCount

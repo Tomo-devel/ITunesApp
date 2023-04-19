@@ -8,7 +8,6 @@
 import SwiftUI
 
 enum ITunes: String, CaseIterable {
-    case all
     case movie
     case tvShow
     case podcast
@@ -21,8 +20,6 @@ enum ITunes: String, CaseIterable {
     
     func changeJP() -> (String, String) {
         switch self {
-        case .all:
-            return ("HOME", "house")
         case .movie:
             return ("映画", "popcorn")
         case .tvShow:
@@ -81,7 +78,7 @@ struct HomeView: View {
                            categoryArray: ITunes.allCases,
                            media: selectITunes?.rawValue ?? "all",
                            category: selectITunes?.changeJP().0 ?? "HOME",
-                           itunes: selectITunes ?? .all)
+                           itunes: selectITunes ?? .movie)
             }
         }
         .preferredColorScheme(.light)

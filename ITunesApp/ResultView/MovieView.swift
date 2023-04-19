@@ -153,6 +153,6 @@ struct MovieView_Previews: PreviewProvider {
         MovieView(viewModel: SearchViewModel(),
                   screenWidth: 0.0,
                   screenHeigth: 0.0,
-                  itunes: .all)
+                  itunes: .movie)
     }
 }

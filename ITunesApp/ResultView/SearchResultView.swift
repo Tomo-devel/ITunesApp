@@ -39,9 +39,6 @@ struct SearchResultView: View {
             case .succese:
                 if viewModel.resultCount != 0 {
                     switch itunes {
-                    case .all:
-                        Text("aaa")
-                        
                     case .movie:
                         MovieView(viewModel: viewModel,
                                   screenWidth: screenWidth,
@@ -114,6 +111,6 @@ struct SearchResultView_Previews: PreviewProvider {
                          media: "",
                          screenWidth: 0.0,
                          screenHeight: 0.0,
-                         itunes: .all)
+                         itunes: .movie)
     }
 }
