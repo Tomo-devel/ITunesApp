@@ -42,10 +42,8 @@ struct MusicView: View {
                        videoUrl: result.previewUrl ?? "",
                        collectionUrl: result.collectionViewUrl ?? "",
                        primaryGenreName: result.primaryGenreName,
-                       releaseDate: result.releaseDate,
+                       releaseDate: result.releaseDate ?? "",
                        trackTimeMillis: result.trackTimeMillis)
-                print("Button: \(result.releaseDate)")
-                print("Button2: \(releaseDate)")
                 
                 isShowDetailView.toggle()
                 
@@ -55,29 +53,33 @@ struct MusicView: View {
                              radius: 0.0)
                     
                     VStack(alignment: .leading) {
-                        Text(result.trackName)
-                            .padding(.bottom)
+                        VStack(alignment: .leading) {
+                            Text(result.trackName)
+                            
+                            if let collectionName = result.collectionName {
+                                Text(collectionName)
+                                    .font(UIDevice.current.userInterfaceIdiom == .phone ? .caption : .body)
+                                    .lineLimit(2)
+                                    .contextMenu {
+                                        NavigationLink {
+                                            WebView(url: result.artistViewUrl ?? "時間をあけてもう一度お試しください")
+                                            
+                                        } label: {
+                                            Text("アーティストページ")
+                                        }
+                                        
+                                        NavigationLink {
+                                            WebView(url: result.collectionViewUrl ?? "時間をあけてもう一度お試しください")
+                                            
+                                        } label: {
+                                            Text("アルバム")
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(.bottom)
                         
                         Text("名：\(result.artistName)")
-                        
-                        if let collectionName = result.collectionName {
-                            Text(collectionName)
-                                .contextMenu { // TODO: それぞれにURL先にどばす処理
-                                    NavigationLink {
-                                        WebView(url: result.artistViewUrl ?? "時間をあけてもう一度お試しください")
-                                        
-                                    } label: {
-                                        Text("アーティストページ")
-                                    }
-                                    
-                                    NavigationLink {
-                                        WebView(url: result.collectionViewUrl ?? "時間をあけてもう一度お試しください")
-                                        
-                                    } label: {
-                                        Text("アルバム")
-                                    }
-                                }
-                        }
                     }
                     .padding(.leading)
                 }

@@ -41,81 +41,153 @@ struct TVView: View {
     
     var body: some View {
         
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.tvShowResults!, id: \.self) { result in
-                    Button {
-                        sample(imageUrl: result.artworkUrl100,
-                               smallImageUrl: result.artworkUrl60,
-                               artistName: result.artistName,
-                               trackName: result.trackName,
-                               collectionName: result.collectionName,
-                               artistUrl: result.artistViewUrl ?? "",
-                               trackUrl: result.trackViewUrl ?? "",
-                               collectionUrl: result.collectionViewUrl ?? "",
-                               releaseDate: result.releaseDate,
-                               primaryGenreName: result.primaryGenreName,
-                               constetAdvisoryRating: result.constetAdvisoryRating ?? "",
-                               longDescription: result.longDescription)
-                        
-                        isShowDetailView.toggle()
-                        
-                    } label: {
-                        HStack {
-                            URLImage(url: result.artworkUrl100,
-                                     radius: 0.0)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            List(viewModel.tvShowResults!, id: \.self) { result in
+                Button {
+                    sample(imageUrl: result.artworkUrl100,
+                           smallImageUrl: result.artworkUrl60,
+                           artistName: result.artistName,
+                           trackName: result.trackName,
+                           collectionName: result.collectionName,
+                           artistUrl: result.artistViewUrl ?? "",
+                           trackUrl: result.trackViewUrl ?? "",
+                           collectionUrl: result.collectionViewUrl ?? "",
+                           releaseDate: result.releaseDate,
+                           primaryGenreName: result.primaryGenreName,
+                           constetAdvisoryRating: result.constetAdvisoryRating ?? "",
+                           longDescription: result.longDescription)
+                    
+                    isShowDetailView.toggle()
+                    
+                } label: {
+                    HStack(alignment: .top) {
+                        URLImage(url: result.artworkUrl100,
+                                 radius: 0.0)
+                        .padding(.trailing)
 
-                            VStack(alignment: .leading) {
-                                Text("（\(result.primaryGenreName)）")
-                                
-                                Text(result.trackName)
-                                    .padding(.bottom)
-                                
-                                Text(result.artistName)
-                            }
-                            .frame(width: screenWidth / 3, alignment: .leading)
-
-                            Spacer()
+                        VStack(alignment: .leading) {
+                            Text("（\(result.primaryGenreName)）")
+                            
+                            Text(result.trackName)
+                                .padding(.bottom)
+                            
+                            Text(result.artistName)
                         }
-                        .padding()
                     }
-                    .buttonStyle(.plain)
-                    .sheet(isPresented: $isShowDetailView) {
-                        DetailView(viewModel: viewModel,
-                                   isShowDetailView: $isShowDetailView,
-                                   imageUrl: $imageUrl,
-                                   smallImageUrl: $smallImageUrl,
-                                   screenshotUrls: .constant(nil),
-                                   ipadScreenshotUrls: .constant(nil),
-                                   trackName: $trackName,
-                                   artistName: $artistName,
-                                   collectionName: Binding($collectionName),
-                                   trackPrice: .constant(nil),
-                                   collectionPrice: .constant(nil),
-                                   artistUrl: Binding($artistUrl),
-                                   trackUrl: Binding($trackUrl),
-                                   videoUrl: .constant(nil),
-                                   collectionUrl: Binding($collectionUrl),
-                                   longDescription: Binding($longDescription),
-                                   primaryGenreName: Binding($primaryGenreName),
-                                   releaseDate: $releaseDate,
-                                   trackTimeMillis: .constant(nil),
-                                   averageUserRating: .constant(nil),
-                                   userRatingCount: .constant(nil),
-                                   fileSizeBytes: .constant(nil),
-                                   languageCodesISO2A: .constant(nil),
-                                   minimumOsVersion: .constant(nil),
-                                   releaseNotes: .constant(nil),
-                                   contentAdvisoryRating: Binding($constetAdvisoryRating),
-                                   genres: .constant(nil),
-                                   itunes: itunes,
-                                   screenWidth: screenWidth,
-                                   screenHeight: screenHeight)
+                }
+                .buttonStyle(.plain)
+                .sheet(isPresented: $isShowDetailView) {
+                    DetailView(viewModel: viewModel,
+                               isShowDetailView: $isShowDetailView,
+                               imageUrl: $imageUrl,
+                               smallImageUrl: $smallImageUrl,
+                               screenshotUrls: .constant(nil),
+                               ipadScreenshotUrls: .constant(nil),
+                               trackName: $trackName,
+                               artistName: $artistName,
+                               collectionName: Binding($collectionName),
+                               trackPrice: .constant(nil),
+                               collectionPrice: .constant(nil),
+                               artistUrl: Binding($artistUrl),
+                               trackUrl: Binding($trackUrl),
+                               videoUrl: .constant(nil),
+                               collectionUrl: Binding($collectionUrl),
+                               longDescription: Binding($longDescription),
+                               primaryGenreName: Binding($primaryGenreName),
+                               releaseDate: $releaseDate,
+                               trackTimeMillis: .constant(nil),
+                               averageUserRating: .constant(nil),
+                               userRatingCount: .constant(nil),
+                               fileSizeBytes: .constant(nil),
+                               languageCodesISO2A: .constant(nil),
+                               minimumOsVersion: .constant(nil),
+                               releaseNotes: .constant(nil),
+                               contentAdvisoryRating: Binding($constetAdvisoryRating),
+                               genres: .constant(nil),
+                               itunes: itunes,
+                               screenWidth: screenWidth,
+                               screenHeight: screenHeight)
+                }
+            }
+            
+        } else {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.tvShowResults!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   artistName: result.artistName,
+                                   trackName: result.trackName,
+                                   collectionName: result.collectionName,
+                                   artistUrl: result.artistViewUrl ?? "",
+                                   trackUrl: result.trackViewUrl ?? "",
+                                   collectionUrl: result.collectionViewUrl ?? "",
+                                   releaseDate: result.releaseDate,
+                                   primaryGenreName: result.primaryGenreName,
+                                   constetAdvisoryRating: result.constetAdvisoryRating ?? "",
+                                   longDescription: result.longDescription)
+                            
+                            isShowDetailView.toggle()
+                            
+                        } label: {
+                            HStack {
+                                URLImage(url: result.artworkUrl100,
+                                         radius: 0.0)
+
+                                VStack(alignment: .leading) {
+                                    Text("（\(result.primaryGenreName)）")
+                                    
+                                    Text(result.trackName)
+                                        .padding(.bottom)
+                                    
+                                    Text(result.artistName)
+                                }
+                                .frame(width: screenWidth / 3, alignment: .leading)
+
+                                Spacer()
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: .constant(nil),
+                                       ipadScreenshotUrls: .constant(nil),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: Binding($collectionName),
+                                       trackPrice: .constant(nil),
+                                       collectionPrice: .constant(nil),
+                                       artistUrl: Binding($artistUrl),
+                                       trackUrl: Binding($trackUrl),
+                                       videoUrl: .constant(nil),
+                                       collectionUrl: Binding($collectionUrl),
+                                       longDescription: Binding($longDescription),
+                                       primaryGenreName: Binding($primaryGenreName),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: .constant(nil),
+                                       averageUserRating: .constant(nil),
+                                       userRatingCount: .constant(nil),
+                                       fileSizeBytes: .constant(nil),
+                                       languageCodesISO2A: .constant(nil),
+                                       minimumOsVersion: .constant(nil),
+                                       releaseNotes: .constant(nil),
+                                       contentAdvisoryRating: Binding($constetAdvisoryRating),
+                                       genres: .constant(nil),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                        }
                     }
                 }
             }
+            .padding()
         }
-        .padding()
+        
     }
     
     func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,

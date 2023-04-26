@@ -46,14 +46,15 @@ struct EbookView: View {
                 isShowDetailView.toggle()
                 
             } label: {
-                HStack {
+                HStack(alignment: .top) {
                     URLImage(url: result.artworkUrl100,
                              radius: 0.0)
-                    .padding([.leading, .trailing])
+                    .padding(UIDevice.current.userInterfaceIdiom == .phone ? .trailing : [.leading, .trailing])
                     
                     VStack(alignment: .leading) {
                         Text(result.trackName)
                             .padding(.bottom)
+                            .lineLimit(2)
                         
                         Text("名：\(result.artistName)")
                     }

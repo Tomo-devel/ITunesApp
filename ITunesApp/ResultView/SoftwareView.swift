@@ -47,7 +47,7 @@ struct SoftwareView: View {
     var body: some View {
         
         ScrollView {
-            LazyVGrid(columns: columns, alignment: .center) {
+            if UIDevice.current.userInterfaceIdiom == .phone {
                 ForEach(viewModel.softwareResults!, id: \.self) { result in
                     Button {
                         sample(imageUrl: result.artworkUrl100,
@@ -68,67 +68,60 @@ struct SoftwareView: View {
                                releaseNotes: result.releaseNotes ?? "",
                                contentAdvisoryRating: result.contentAdvisoryRating)
                         
-                        print(artistUrl)
-                        
                         isShowDetailView.toggle()
                         
                     } label: {
                         Card(colour: Color(.systemGray6),
-                             opacity: 1)
-                        .overlay {
-                            HStack {
-                                VStack {
-                                    URLImage(url: result.artworkUrl100,
-                                             radius: 16.0)
-                                    .padding(.top)
-                                    
-                                    HStack {
-                                        Text("年齢")
-                                            .font(.callout)
+                             opacity: 1.0)
+                            .overlay {
+                                HStack(alignment: .center) {
+                                    VStack {
+                                        URLImage(url: result.artworkUrl100,
+                                                 radius: 16.0)
+                                        .padding(.top)
                                         
-                                        Text("\(result.contentAdvisoryRating)")
-                                            .fontWeight(.bold)
-                                            .font(.subheadline)
-                                    }
-                                    .padding()
-                                }
-                                .padding(.leading)
-                                
-                                VStack(alignment: .leading) {
-                                    Text(result.trackName)
-                                        .lineLimit(2)
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                    
-                                    Text(result.artistName)
-                                        .lineLimit(1)
-                                        .font(.caption2)
-                                        .padding(.bottom)
-                                    
-                                    Text("\(result.userRatingCount)件の評価")
-                                        .font(.body)
-                                    
-                                    Text("\(String(format: "%.1f", round(result.averageUserRating * 10) / 10))")
-                                        .font(.subheadline)
-                                        .fontWeight(.bold)
-                                    
-                                    HStack {
-                                        ForEach(0 ..< 5) { star in
-                                            RatingStar(rating: Decimal(result.averageUserRating),
-                                                       colour: .black,
-                                                       star: star)
-                                            .frame(width: screenWidth / 40, height: screenHeight / 40)
+                                        HStack {
+                                            Text("年齢")
+                                                .font(.callout)
                                             
+                                            Text("\(result.contentAdvisoryRating)")
+                                                .fontWeight(.bold)
+                                                .font(.subheadline)
+                                        }
+                                        .padding()
+                                    }
+                                    .padding(.leading)
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text(result.trackName)
+                                            .font(.callout)
+                                            .fontWeight(.semibold)
+                                            .lineLimit(2)
+                                        
+                                        Text(result.artistName)
+                                            .lineLimit(1)
+                                            .font(.caption2)
+                                            .padding(.bottom)
+                                            
+                                        Text("\(String(format: "%.1f", round(result.averageUserRating * 10) / 10))")
+                                            .font(.subheadline)
+                                            .fontWeight(.bold)
+                                        
+                                        HStack {
+                                            ForEach(0 ..< 5) { star in
+                                                RatingStar(rating: Decimal(result.averageUserRating),
+                                                           colour: .black,
+                                                           star: star)
+                                                .frame(width: screenWidth / 40, height: screenHeight / 40)
+                                            }
                                         }
                                     }
+                                    .padding(.horizontal)
+                                    
+                                    Spacer()
                                 }
                                 .padding()
-                                .frame(width: screenWidth / 3, alignment: .leading)
                             }
-                            .padding()
-                            .scaledToFill()
-                        }
-                        .clipped()
                     }
                     .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $isShowDetailView) {
@@ -162,6 +155,126 @@ struct SoftwareView: View {
                                    itunes: itunes,
                                    screenWidth: screenWidth,
                                    screenHeight: screenHeight)
+                    }
+                }
+                
+            } else {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    ForEach(viewModel.softwareResults!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   screenshotUrls: result.screenshotUrls ?? [],
+                                   ipadScreenshotUrls: result.ipadScreenshotUrls ?? [],
+                                   trackName: result.trackName,
+                                   artistName: result.artistName,
+                                   artistUrl: result.artistViewUrl,
+                                   description: result.description,
+                                   primaryGenreName: result.primaryGenreName,
+                                   releaseDate: result.releaseDate,
+                                   averageUserRating: result.averageUserRating,
+                                   userRatingCount: result.userRatingCount,
+                                   fileSizeBytes: result.fileSizeBytes,
+                                   languageCodesISO2A: result.languageCodesISO2A,
+                                   minimumOsVersion: result.minimumOsVersion!,
+                                   releaseNotes: result.releaseNotes ?? "",
+                                   contentAdvisoryRating: result.contentAdvisoryRating)
+                            
+                            print(artistUrl)
+                            
+                            isShowDetailView.toggle()
+                            
+                        } label: {
+                            Card(colour: Color(.systemGray6),
+                                 opacity: 1)
+                            .overlay {
+                                HStack {
+                                    VStack {
+                                        URLImage(url: result.artworkUrl100,
+                                                 radius: 16.0)
+                                        .padding(.top)
+                                        
+                                        HStack {
+                                            Text("年齢")
+                                                .font(.callout)
+                                            
+                                            Text("\(result.contentAdvisoryRating)")
+                                                .fontWeight(.bold)
+                                                .font(.subheadline)
+                                        }
+                                        .padding()
+                                    }
+                                    .padding(.leading)
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text(result.trackName)
+                                            .lineLimit(2)
+                                            .font(.headline)
+                                            .fontWeight(.semibold)
+                                        
+                                        Text(result.artistName)
+                                            .lineLimit(1)
+                                            .font(.caption2)
+                                            .padding(.bottom)
+                                        
+                                        Text("\(result.userRatingCount)件の評価")
+                                            .font(.body)
+                                        
+                                        Text("\(String(format: "%.1f", round(result.averageUserRating * 10) / 10))")
+                                            .font(.subheadline)
+                                            .fontWeight(.bold)
+                                        
+                                        HStack {
+                                            ForEach(0 ..< 5) { star in
+                                                RatingStar(rating: Decimal(result.averageUserRating),
+                                                           colour: .black,
+                                                           star: star)
+                                                .frame(width: screenWidth / 40, height: screenHeight / 40)
+                                                
+                                            }
+                                        }
+                                    }
+                                    .padding()
+                                    .frame(width: screenWidth / 3, alignment: .leading)
+                                }
+                                .padding()
+                                .scaledToFill()
+                            }
+                            .clipped()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: Binding($screenshotUrls),
+                                       ipadScreenshotUrls: Binding($ipadScreenshotUrls),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: .constant(nil),
+                                       trackPrice: .constant(nil),
+                                       collectionPrice: .constant(nil),
+                                       artistUrl: Binding($artistUrl),
+                                       trackUrl: .constant(nil),
+                                       videoUrl: .constant(nil),
+                                       collectionUrl: .constant(nil),
+                                       longDescription: Binding($description),
+                                       primaryGenreName: Binding($primaryGenreName),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: .constant(nil),
+                                       averageUserRating: Binding($averageUserRating),
+                                       userRatingCount: Binding($userRatingCount),
+                                       fileSizeBytes: Binding($fileSizeBytes),
+                                       languageCodesISO2A: Binding($languageCodesISO2A),
+                                       minimumOsVersion: Binding($minimumOsVersion),
+                                       releaseNotes: Binding($releaseNotes),
+                                       contentAdvisoryRating: Binding($contentAdvisoryRating),
+                                       genres: .constant(nil),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                        }
                     }
                 }
             }

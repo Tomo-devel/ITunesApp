@@ -41,8 +41,8 @@ struct PodcastView: View {
     
     var body: some View {
         
-        ScrollView {
-            LazyVGrid(columns: columns, alignment: .center) {
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            ScrollView {
                 ForEach(viewModel.podcastResults!, id: \.self) { result in
                     Button {
                         sample(imageUrl: result.artworkUrl100,
@@ -65,17 +65,9 @@ struct PodcastView: View {
                              opacity: 0.2)
                         .overlay {
                             HStack {
-                                VStack {
-                                    URLImage(url: result.artworkUrl100,
-                                             radius: 0.0)
-                                    .padding(.top)
-                                    
-                                    Text("￥\(result.trackPrice)")
-                                        .font(.subheadline)
-                                        .fontWeight(.bold)
-                                        .padding()
-                                }
-                                .padding(.leading)
+                                URLImage(url: result.artworkUrl100,
+                                         radius: 0.0)
+                                .padding(.horizontal)
                                 
                                 VStack(alignment: .leading) {
                                     Text("（\(result.primaryGenreName)）")
@@ -86,15 +78,14 @@ struct PodcastView: View {
                                         .padding(.bottom)
                                     
                                     Text(result.artistName)
+                                        .font(.caption)
                                         .lineLimit(2)
                                 }
-                                .padding()
-                                .frame(width: screenWidth / 3, alignment: .leading)
+                                
+                                Spacer()
                             }
-                            .padding([.leading, .trailing])
-                            .scaledToFill()
+                            .padding()
                         }
-                        .clipped()
                     }
                     .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $isShowDetailView) {
@@ -128,6 +119,99 @@ struct PodcastView: View {
                                    itunes: itunes,
                                    screenWidth: screenWidth,
                                    screenHeight: screenHeight)
+                    }
+                }
+            }
+            
+        } else {
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    ForEach(viewModel.podcastResults!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   artistName: result.artistName,
+                                   trackName: result.trackName,
+                                   collectionName: result.collectionName,
+                                   trackUrl: result.trackViewUrl ?? "",
+                                   collectionUrl: result.collectionViewUrl ?? "",
+                                   trackPrice: String(result.trackPrice),
+                                   collectionPrice: String(result.collectionPrice),
+                                   releaseDate: result.releaseDate,
+                                   trackTimeMillis: result.trackTimeMillis ?? 0,
+                                   genres: result.genres)
+                            
+                            isShowDetailView.toggle()
+                            
+                        } label: {
+                            Card(colour: .purple,
+                                 opacity: 0.2)
+                            .overlay {
+                                HStack {
+                                    VStack {
+                                        URLImage(url: result.artworkUrl100,
+                                                 radius: 0.0)
+                                        .padding(.top)
+                                        
+                                        Text("￥\(result.trackPrice)")
+                                            .font(.subheadline)
+                                            .fontWeight(.bold)
+                                            .padding()
+                                    }
+                                    .padding(.leading)
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text("（\(result.primaryGenreName)）")
+                                        
+                                        Text(result.trackName)
+                                            .lineLimit(2)
+                                            .font(.headline)
+                                            .padding(.bottom)
+                                        
+                                        Text(result.artistName)
+                                            .lineLimit(2)
+                                    }
+                                    .padding()
+                                    .frame(width: screenWidth / 3, alignment: .leading)
+                                }
+                                .padding([.leading, .trailing])
+                                .scaledToFill()
+                            }
+                            .clipped()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: .constant(nil),
+                                       ipadScreenshotUrls: .constant(nil),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: Binding($collectionName),
+                                       trackPrice: Binding($trackPrice),
+                                       collectionPrice: Binding($collectionPrice),
+                                       artistUrl: .constant(nil),
+                                       trackUrl: Binding($trackUrl),
+                                       videoUrl: .constant(nil),
+                                       collectionUrl: Binding($collectionUrl),
+                                       longDescription: .constant(nil),
+                                       primaryGenreName: .constant(nil),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: Binding($trackTimeMillis),
+                                       averageUserRating: .constant(nil),
+                                       userRatingCount: .constant(nil),
+                                       fileSizeBytes: .constant(nil),
+                                       languageCodesISO2A: .constant(nil),
+                                       minimumOsVersion: .constant(nil),
+                                       releaseNotes: .constant(nil),
+                                       contentAdvisoryRating: .constant(nil),
+                                       genres: Binding($genres),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                        }
                     }
                 }
             }

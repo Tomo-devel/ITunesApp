@@ -40,7 +40,6 @@ struct SoftwareDetailView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
                             
-                            
                             NavigationLink {
                                 WebView(url: artistUrl)
                                     .aspectRatio(contentMode: .fit)
@@ -76,7 +75,6 @@ struct SoftwareDetailView: View {
                                 }
                             }
                         }
-                        .padding()
                         
                         Divider()
                         VStack() {
@@ -86,7 +84,6 @@ struct SoftwareDetailView: View {
                             Text(contentAdvisoryRating)
                                 .font(.headline)
                         }
-                        .padding()
                         
                         Divider()
                         VStack {
@@ -100,8 +97,6 @@ struct SoftwareDetailView: View {
                             }
                         }
                         
-                        .padding()
-                        
                         Divider()
                         VStack {
                             Text("サイズ")
@@ -109,7 +104,6 @@ struct SoftwareDetailView: View {
                             
                             Text("\(fileSizeBytes)")
                         }
-                        .padding()
                     }
                     .onTapGesture {
                         withAnimation {
@@ -146,8 +140,9 @@ struct SoftwareDetailView: View {
                             .font(.title3)
                             .fontWeight(.bold)
                             .id(1)
+                            .padding(.vertical)
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("販売元")
                             
                             Spacer()
@@ -163,7 +158,7 @@ struct SoftwareDetailView: View {
                         }
                         .padding()
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("サイズ")
                             
                             Spacer()
@@ -171,7 +166,7 @@ struct SoftwareDetailView: View {
                         }
                         .padding()
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("カテゴリ")
                             
                             Spacer()
@@ -179,7 +174,7 @@ struct SoftwareDetailView: View {
                         }
                         .padding()
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("言語")
                             
                             Spacer()
@@ -187,7 +182,7 @@ struct SoftwareDetailView: View {
                         }
                         .padding()
                         
-                        HStack {
+                        HStack(alignment: .top) {
                             Text("対象年齢")
                             
                             Spacer()
@@ -196,7 +191,6 @@ struct SoftwareDetailView: View {
                         .padding()
                     }
                 }
-                .padding()
             }
             .padding()
         }

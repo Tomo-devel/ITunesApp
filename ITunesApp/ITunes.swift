@@ -101,7 +101,7 @@ struct ITunesMusicResult: Decodable {
         let previewUrl: String?
         let artworkUrl30, artworkUrl60, artworkUrl100: String
         let collectionPrice, trackPrice: Int?
-        let releaseDate: String
+        let releaseDate: String?
         let trackTimeMillis: Int
         let isStreamable: Bool?
         let collectionArtistName: String?

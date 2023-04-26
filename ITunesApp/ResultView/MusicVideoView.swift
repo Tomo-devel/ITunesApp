@@ -44,83 +44,161 @@ struct MusicVideoView: View {
     
     var body: some View {
         
-        ScrollView {
-            LazyVGrid(columns: columns, alignment: .center) {
-                ForEach(viewModel.musicVideoResults!, id: \.self) { result in
-                   
-                    Button {
-                        sample(imageUrl: result.artworkUrl100,
-                               smallImageUrl: result.artworkUrl60,
-                               artistName: result.artistName,
-                               trackName: result.trackName,
-                               collectionName: result.collectionName ?? "",
-                               artistUrl: result.artistViewUrl ?? "",
-                               trackUrl: result.trackViewUrl ?? "",
-                               collectionUrl: result.collectionViewUrl ?? "",
-                               videoUrl: result.previewUrl ?? "",
-                               trackPrice: String(result.trackPrice ?? 0),
-                               collectonPrice: String(result.collectionPrice ?? 0),
-                               releaseDate: result.releaseDate,
-                               trackTimeMillis: result.trackTimeMillis ?? 0,
-                               primaryGenreName: result.primaryGenreName)
-                        
-                        isShowDetailView.toggle()
-                        
-                    } label: {
-                        VStack {
-                            URLImage(url: result.artworkUrl100,
-                                     radius: 16)
-                            .padding()
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(viewModel.musicVideoResults!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   artistName: result.artistName,
+                                   trackName: result.trackName,
+                                   collectionName: result.collectionName ?? "",
+                                   artistUrl: result.artistViewUrl ?? "",
+                                   trackUrl: result.trackViewUrl ?? "",
+                                   collectionUrl: result.collectionViewUrl ?? "",
+                                   videoUrl: result.previewUrl ?? "",
+                                   trackPrice: String(result.trackPrice ?? 0),
+                                   collectonPrice: String(result.collectionPrice ?? 0),
+                                   releaseDate: result.releaseDate,
+                                   trackTimeMillis: result.trackTimeMillis ?? 0,
+                                   primaryGenreName: result.primaryGenreName)
                             
-                            Text(result.artistName)
-                                .lineLimit(3)
+                            isShowDetailView.toggle()
                             
-                            Spacer()
+                        } label: {
+                            HStack(alignment: .top) {
+                                URLImage(url: result.artworkUrl100,
+                                         radius: 0.0)
+                                
+                                VStack(alignment: .leading) {
+                                    Text(result.trackName)
+                                        .lineLimit(2)
+                                    
+                                    Text(result.artistName)
+                                        .font(.caption)
+                                        .lineLimit(1)
+                                        .padding(.bottom)
+                                }
+                            }
                         }
-                        .padding()
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.pink)
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: .constant(nil),
+                                       ipadScreenshotUrls: .constant(nil),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: Binding($collectionName),
+                                       trackPrice: Binding($trackPrice),
+                                       collectionPrice: Binding($collectionPrice),
+                                       artistUrl: Binding($artistUrl),
+                                       trackUrl: Binding($trackUrl),
+                                       videoUrl: Binding($videoUrl),
+                                       collectionUrl: Binding($collectionUrl),
+                                       longDescription: .constant(nil),
+                                       primaryGenreName: Binding($primaryGrenreName),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: Binding($trackTimeMillis),
+                                       averageUserRating: .constant(nil),
+                                       userRatingCount: .constant(nil),
+                                       fileSizeBytes: .constant(nil),
+                                       languageCodesISO2A: .constant(nil),
+                                       minimumOsVersion: .constant(nil),
+                                       releaseNotes: .constant(nil),
+                                       contentAdvisoryRating: .constant(nil),
+                                       genres: .constant(nil),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
                         }
-                        .padding()
-                    }
-                    .buttonStyle(.plain)
-                    .sheet(isPresented: $isShowDetailView) {
-                        DetailView(viewModel: viewModel,
-                                   isShowDetailView: $isShowDetailView,
-                                   imageUrl: $imageUrl,
-                                   smallImageUrl: $smallImageUrl,
-                                   screenshotUrls: .constant(nil),
-                                   ipadScreenshotUrls: .constant(nil),
-                                   trackName: $trackName,
-                                   artistName: $artistName,
-                                   collectionName: Binding($collectionName),
-                                   trackPrice: Binding($trackPrice),
-                                   collectionPrice: Binding($collectionPrice),
-                                   artistUrl: Binding($artistUrl),
-                                   trackUrl: Binding($trackUrl),
-                                   videoUrl: Binding($videoUrl),
-                                   collectionUrl: Binding($collectionUrl),
-                                   longDescription: .constant(nil),
-                                   primaryGenreName: Binding($primaryGrenreName),
-                                   releaseDate: $releaseDate,
-                                   trackTimeMillis: Binding($trackTimeMillis),
-                                   averageUserRating: .constant(nil),
-                                   userRatingCount: .constant(nil),
-                                   fileSizeBytes: .constant(nil),
-                                   languageCodesISO2A: .constant(nil),
-                                   minimumOsVersion: .constant(nil),
-                                   releaseNotes: .constant(nil),
-                                   contentAdvisoryRating: .constant(nil),
-                                   genres: .constant(nil),
-                                   itunes: itunes,
-                                   screenWidth: screenWidth,
-                                   screenHeight: screenHeight)
                     }
                 }
+                .padding()
             }
-            .padding()
+            
+        } else {
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    ForEach(viewModel.musicVideoResults!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   artistName: result.artistName,
+                                   trackName: result.trackName,
+                                   collectionName: result.collectionName ?? "",
+                                   artistUrl: result.artistViewUrl ?? "",
+                                   trackUrl: result.trackViewUrl ?? "",
+                                   collectionUrl: result.collectionViewUrl ?? "",
+                                   videoUrl: result.previewUrl ?? "",
+                                   trackPrice: String(result.trackPrice ?? 0),
+                                   collectonPrice: String(result.collectionPrice ?? 0),
+                                   releaseDate: result.releaseDate,
+                                   trackTimeMillis: result.trackTimeMillis ?? 0,
+                                   primaryGenreName: result.primaryGenreName)
+                            
+                            isShowDetailView.toggle()
+                            
+                        } label: {
+                            VStack {
+                                URLImage(url: result.artworkUrl100,
+                                         radius: 16)
+                                .padding()
+                                
+                                Text(result.artistName)
+                                    .lineLimit(3)
+                                
+                                Spacer()
+                            }
+                            .padding()
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color.pink)
+                            }
+                            .padding()
+                        }
+                        .buttonStyle(.plain)
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: .constant(nil),
+                                       ipadScreenshotUrls: .constant(nil),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: Binding($collectionName),
+                                       trackPrice: Binding($trackPrice),
+                                       collectionPrice: Binding($collectionPrice),
+                                       artistUrl: Binding($artistUrl),
+                                       trackUrl: Binding($trackUrl),
+                                       videoUrl: Binding($videoUrl),
+                                       collectionUrl: Binding($collectionUrl),
+                                       longDescription: .constant(nil),
+                                       primaryGenreName: Binding($primaryGrenreName),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: Binding($trackTimeMillis),
+                                       averageUserRating: .constant(nil),
+                                       userRatingCount: .constant(nil),
+                                       fileSizeBytes: .constant(nil),
+                                       languageCodesISO2A: .constant(nil),
+                                       minimumOsVersion: .constant(nil),
+                                       releaseNotes: .constant(nil),
+                                       contentAdvisoryRating: .constant(nil),
+                                       genres: .constant(nil),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                        }
+                    }
+                }
+                .padding()
+            }
         }
+        
     }
     
     func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String, collectionName: String,

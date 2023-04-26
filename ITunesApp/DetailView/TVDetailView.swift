@@ -23,10 +23,10 @@ struct TVDetailView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(alignment: .top) {
                 URLImage(url: imageUrl,
                          radius: 0.0)
-                .padding()
+                .padding(.trailing)
                 
                 VStack(alignment: .leading) {
                     Text(trackName)

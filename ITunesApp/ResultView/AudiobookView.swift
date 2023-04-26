@@ -41,93 +41,164 @@ struct AudiobookView: View {
     
     var body: some View {
         
-        ScrollView {
-            LazyVGrid(columns: columns, alignment: .center) {
-                ForEach(viewModel.audiobookResult!, id: \.self) { result in
-                    Button {
-                        sample(imageUrl: result.artworkUrl100,
-                               smallImageUrl: result.artworkUrl60,
-                               trackName: "",
-                               collectionName: result.collectionName,
-                               artistName: result.artistName,
-                               collectionUrl: result.collectionViewUrl ?? "",
-                               artistUrl: result.artistViewUrl ?? "",
-                               videoUrl: result.previewUrl ?? "",
-                               collectionPrice: String(result.collectionPrice),
-                               releaseDate: result.releaseDate,
-                               primaryGenreName: result.primaryGenreName,
-                               description: result.description)
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            List(viewModel.audiobookResult!, id: \.self) { result in
+                Button {
+                    sample(imageUrl: result.artworkUrl100,
+                           smallImageUrl: result.artworkUrl60,
+                           trackName: "",
+                           collectionName: result.collectionName,
+                           artistName: result.artistName,
+                           collectionUrl: result.collectionViewUrl ?? "",
+                           artistUrl: result.artistViewUrl ?? "",
+                           videoUrl: result.previewUrl ?? "",
+                           collectionPrice: String(result.collectionPrice),
+                           releaseDate: result.releaseDate,
+                           primaryGenreName: result.primaryGenreName,
+                           description: result.description)
+                    
+                    isShowDetailView.toggle()
+                    
+                } label: {
+                    HStack(alignment: .top) {
+                        URLImage(url: result.artworkUrl100,
+                                 radius: 0.0)
+                        .padding(.trailing)
                         
-                        isShowDetailView.toggle()
-                        
-                    } label: {
-                        Card(colour: .orange,
-                             opacity: 0.2)
-                            .overlay {
-                                HStack {
-                                    VStack {
-                                        URLImage(url: result.artworkUrl100,
-                                                 radius: 10.0)
-                                        .padding(.top)
-                                        
-                                        Text("￥\(result.collectionPrice)")
-                                            .font(.subheadline)
-                                            .fontWeight(.bold)
-                                            .padding()
-                                    }
-                                    .padding(.leading)
-                                    
-                                    VStack(alignment: .leading) {
-                                        Text("（\(result.primaryGenreName)）")
-                                        
-                                        Text(result.collectionName)
-                                            .lineLimit(2)
-                                            .font(.headline)
-                                            .padding(.bottom)
-
-                                        Text(result.artistName)
-                                            .lineLimit(3)
-                                    }
-                                    .padding()
-                                    .frame(width: screenWidth / 3, alignment: .leading)
-                                }
-                                .padding([.leading, .trailing])
-                                .scaledToFill()
-                            }
-                            .clipped()
+                        VStack(alignment: .leading) {
+                            Text(result.collectionName)
+                                .lineLimit(2)
+                                .padding(.bottom)
+                            
+                            Text("名：\(result.artistName)")
+                                .lineLimit(2)
+                        }
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .sheet(isPresented: $isShowDetailView) {
-                        DetailView(viewModel: viewModel,
-                                   isShowDetailView: $isShowDetailView,
-                                   imageUrl: $imageUrl,
-                                   smallImageUrl: $smallImageUrl,
-                                   screenshotUrls: .constant(nil),
-                                   ipadScreenshotUrls: .constant(nil),
-                                   trackName: $trackName,
-                                   artistName: $artistName,
-                                   collectionName: Binding($collectionName),
-                                   trackPrice: .constant(nil),
-                                   collectionPrice: Binding($collectionPrice),
-                                   artistUrl: Binding($artistUrl),
-                                   trackUrl: .constant(nil),
-                                   videoUrl: Binding($videoUrl),
-                                   collectionUrl: Binding($collectionUrl),
-                                   longDescription: Binding($description),
-                                   primaryGenreName: Binding($primaryGenreName),
-                                   releaseDate: $releaseDate,
-                                   trackTimeMillis: .constant(nil),
-                                   averageUserRating: .constant(nil),
-                                   userRatingCount: .constant(nil),
-                                   fileSizeBytes: .constant(nil),
-                                   languageCodesISO2A: .constant(nil),
-                                   minimumOsVersion: .constant(nil),
-                                   releaseNotes: .constant(nil),
-                                   contentAdvisoryRating: .constant(nil),
-                                   genres: .constant(nil),
-                                   itunes: itunes,
-                                   screenWidth: screenWidth,
-                                   screenHeight: screenHeight)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .sheet(isPresented: $isShowDetailView) {
+                    DetailView(viewModel: viewModel,
+                               isShowDetailView: $isShowDetailView,
+                               imageUrl: $imageUrl,
+                               smallImageUrl: $smallImageUrl,
+                               screenshotUrls: .constant(nil),
+                               ipadScreenshotUrls: .constant(nil),
+                               trackName: $trackName,
+                               artistName: $artistName,
+                               collectionName: Binding($collectionName),
+                               trackPrice: .constant(nil),
+                               collectionPrice: Binding($collectionPrice),
+                               artistUrl: Binding($artistUrl),
+                               trackUrl: .constant(nil),
+                               videoUrl: Binding($videoUrl),
+                               collectionUrl: Binding($collectionUrl),
+                               longDescription: Binding($description),
+                               primaryGenreName: Binding($primaryGenreName),
+                               releaseDate: $releaseDate,
+                               trackTimeMillis: .constant(nil),
+                               averageUserRating: .constant(nil),
+                               userRatingCount: .constant(nil),
+                               fileSizeBytes: .constant(nil),
+                               languageCodesISO2A: .constant(nil),
+                               minimumOsVersion: .constant(nil),
+                               releaseNotes: .constant(nil),
+                               contentAdvisoryRating: .constant(nil),
+                               genres: .constant(nil),
+                               itunes: itunes,
+                               screenWidth: screenWidth,
+                               screenHeight: screenHeight)
+                }
+            }
+            
+        } else {
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .center) {
+                    ForEach(viewModel.audiobookResult!, id: \.self) { result in
+                        Button {
+                            sample(imageUrl: result.artworkUrl100,
+                                   smallImageUrl: result.artworkUrl60,
+                                   trackName: "",
+                                   collectionName: result.collectionName,
+                                   artistName: result.artistName,
+                                   collectionUrl: result.collectionViewUrl ?? "",
+                                   artistUrl: result.artistViewUrl ?? "",
+                                   videoUrl: result.previewUrl ?? "",
+                                   collectionPrice: String(result.collectionPrice),
+                                   releaseDate: result.releaseDate,
+                                   primaryGenreName: result.primaryGenreName,
+                                   description: result.description)
+                            
+                            isShowDetailView.toggle()
+                            
+                        } label: {
+                            Card(colour: .orange,
+                                 opacity: 0.2)
+                                .overlay {
+                                    HStack {
+                                        VStack {
+                                            URLImage(url: result.artworkUrl100,
+                                                     radius: 10.0)
+                                            .padding(.top)
+                                            
+                                            Text("￥\(result.collectionPrice)")
+                                                .font(.subheadline)
+                                                .fontWeight(.bold)
+                                                .padding()
+                                        }
+                                        .padding(.leading)
+                                        
+                                        VStack(alignment: .leading) {
+                                            Text("（\(result.primaryGenreName)）")
+                                            
+                                            Text(result.collectionName)
+                                                .lineLimit(2)
+                                                .font(.headline)
+                                                .padding(.bottom)
+
+                                            Text(result.artistName)
+                                                .lineLimit(3)
+                                        }
+                                        .padding()
+                                        .frame(width: screenWidth / 3, alignment: .leading)
+                                    }
+                                    .padding([.leading, .trailing])
+                                    .scaledToFill()
+                                }
+                                .clipped()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .sheet(isPresented: $isShowDetailView) {
+                            DetailView(viewModel: viewModel,
+                                       isShowDetailView: $isShowDetailView,
+                                       imageUrl: $imageUrl,
+                                       smallImageUrl: $smallImageUrl,
+                                       screenshotUrls: .constant(nil),
+                                       ipadScreenshotUrls: .constant(nil),
+                                       trackName: $trackName,
+                                       artistName: $artistName,
+                                       collectionName: Binding($collectionName),
+                                       trackPrice: .constant(nil),
+                                       collectionPrice: Binding($collectionPrice),
+                                       artistUrl: Binding($artistUrl),
+                                       trackUrl: .constant(nil),
+                                       videoUrl: Binding($videoUrl),
+                                       collectionUrl: Binding($collectionUrl),
+                                       longDescription: Binding($description),
+                                       primaryGenreName: Binding($primaryGenreName),
+                                       releaseDate: $releaseDate,
+                                       trackTimeMillis: .constant(nil),
+                                       averageUserRating: .constant(nil),
+                                       userRatingCount: .constant(nil),
+                                       fileSizeBytes: .constant(nil),
+                                       languageCodesISO2A: .constant(nil),
+                                       minimumOsVersion: .constant(nil),
+                                       releaseNotes: .constant(nil),
+                                       contentAdvisoryRating: .constant(nil),
+                                       genres: .constant(nil),
+                                       itunes: itunes,
+                                       screenWidth: screenWidth,
+                                       screenHeight: screenHeight)
+                        }
                     }
                 }
             }

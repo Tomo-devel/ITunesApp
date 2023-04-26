@@ -25,14 +25,14 @@ struct EbookDetailView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(alignment: .top) {
                 URLImage(url: imageUrl,
                          radius: 0.0)
-                .padding()
+                .padding(.trailing)
                 
                 VStack(alignment: .leading) {
                     Text(trackName)
-                        .font(.title2)
+                        .font(UIDevice.current.userInterfaceIdiom == .phone ? .body : .title2)
                         .fontWeight(.bold)
                     
                     NavigationLink {
@@ -103,7 +103,7 @@ struct EbookDetailView: View {
                             Spacer()
                             VStack(alignment: .leading) {
                                 ForEach(genres, id: \.self) { genres in
-                                    Text("・\(genres)")
+                                    Text("\(genres)")
                                 }
                             }
                         }
@@ -145,7 +145,6 @@ struct EbookDetailView: View {
                         }
                     }
                 }
-                .padding()
             }
             .padding()
         }

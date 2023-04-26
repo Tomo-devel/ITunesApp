@@ -25,10 +25,10 @@ struct MusicVideoDetailView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(alignment: .top) {
                 VStack(alignment: .leading) {
                     Text(trackName)
-                        .font(.title2)
+                        .font(UIDevice.current.userInterfaceIdiom == .phone ? .body : .title2)
                         .fontWeight(.bold)
                     
                     if let artistUrl {

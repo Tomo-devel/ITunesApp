@@ -48,14 +48,80 @@ struct HomeView: View {
     var body: some View {
         
         NavigationSplitView {
-            List(ITunes.allCases, id: \.self, selection: $selectITunes) { itunes in
-                NavigationLink(value: itunes) {
-                    Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
-                        .foregroundColor(.black)
+            VStack(spacing: 1) {
+                
+                if UIDevice.current.userInterfaceIdiom == .phone {
+                    List(selection: $selectITunes) {
+                        ForEach(ITunes.allCases, id: \.self) { itunes in
+                            NavigationLink(value: itunes) {
+                                Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
+                                    .foregroundColor(.black)
+                            }
+                        }
+                        
+                        Spacer()
+                        Text("おすすめ")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                            .listRowSeparator(.hidden)
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(0 ..< 10) { _ in
+                                    Button {
+                                        
+                                    } label: {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .frame(width: 100, height: 100)
+                                    }
+                                }
+                            }
+                        }
+                        .listRowSeparator(.hidden)
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(0 ..< 10) { _ in
+                                    Button {
+                                        
+                                    } label: {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .frame(width: 100, height: 100)
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .listRowSeparator(.hidden)
+                        
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(0 ..< 10) { _ in
+                                    Button {
+                                        
+                                    } label: {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .frame(width: 100, height: 100)
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .listRowSeparator(.hidden)
+                    }
+                   
+                    
+                } else {
+                    List(ITunes.allCases, id: \.self, selection: $selectITunes) { itunes in
+                        NavigationLink(value: itunes) {
+                            Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
+                                .foregroundColor(.black)
+                        }
+                    }
                 }
             }
             .disabled(isSearch)
-            .navigationTitle("カテゴリー")
+            .navigationTitle(UIDevice.current.userInterfaceIdiom == .phone ? "Search" : "カテゴリー")
             .toolbar {
                 ToolbarItem {
                     Button {
@@ -71,6 +137,7 @@ struct HomeView: View {
                     }
                 }
             }
+            
             
         } detail: {
             NavigationStack {

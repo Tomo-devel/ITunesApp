@@ -21,12 +21,12 @@ struct MovieDetailView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(alignment: .top) {
                 URLImage(url: image, radius: 0.0)
                 
                 VStack(alignment: .leading) {
                     Text(title)
-                        .font(.title2)
+                        .font(UIDevice.current.userInterfaceIdiom == .phone ? .body : .title2)
                         .fontWeight(.bold)
                     
                     Text(artist)
@@ -52,7 +52,6 @@ struct MovieDetailView: View {
                         Text("予告")
                             .font(.title3)
                             .fontWeight(.bold)
-                            .padding(.bottom)
                         
                         WebView(url: videoUrl)
                             .aspectRatio(contentMode: .fit)

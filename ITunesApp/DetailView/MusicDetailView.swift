@@ -24,14 +24,14 @@ struct MusicDetailView: View {
     var body: some View {
         
         VStack {
-            HStack {
+            HStack(alignment: .top) {
                 URLImage(url: imageUrl,
                          radius: 0.0)
-                .padding()
+                .padding(.trailing)
                 
                 VStack(alignment: .leading) {
                     Text(trackName)
-                        .font(.title2)
+                        .font(UIDevice.current.userInterfaceIdiom == .phone ? .body : .title2)
                         .fontWeight(.bold)
                     
                     if let artistUrl {
@@ -78,7 +78,7 @@ struct MusicDetailView: View {
                     Text("情報")
                         .font(.title3)
                         .fontWeight(.bold)
-                        .padding()
+                        .padding(.bottom)
                     
                     Group {
                         HStack(alignment: .top) {
@@ -191,7 +191,6 @@ struct MusicDetailView: View {
                 }
                 .padding()
             }
-            .padding()
         }
         .padding()
     }
