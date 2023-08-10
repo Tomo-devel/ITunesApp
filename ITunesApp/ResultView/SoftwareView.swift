@@ -50,7 +50,7 @@ struct SoftwareView: View {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 ForEach(viewModel.softwareResults!, id: \.self) { result in
                     Button {
-                        sample(imageUrl: result.artworkUrl100,
+                        assignment(imageUrl: result.artworkUrl100,
                                smallImageUrl: result.artworkUrl60,
                                screenshotUrls: result.screenshotUrls ?? [],
                                ipadScreenshotUrls: result.ipadScreenshotUrls ?? [],
@@ -162,7 +162,7 @@ struct SoftwareView: View {
                 LazyVGrid(columns: columns, alignment: .center) {
                     ForEach(viewModel.softwareResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    screenshotUrls: result.screenshotUrls ?? [],
                                    ipadScreenshotUrls: result.ipadScreenshotUrls ?? [],
@@ -282,7 +282,7 @@ struct SoftwareView: View {
     }
     
     
-    func sample(imageUrl: String, smallImageUrl: String, screenshotUrls: [String],
+    func assignment(imageUrl: String, smallImageUrl: String, screenshotUrls: [String],
                 ipadScreenshotUrls: [String], trackName: String, artistName: String,
                 artistUrl: String, description: String, primaryGenreName: String,
                 releaseDate: String, averageUserRating: Double, userRatingCount: Int,

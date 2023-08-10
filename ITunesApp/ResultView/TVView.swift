@@ -44,7 +44,7 @@ struct TVView: View {
         if UIDevice.current.userInterfaceIdiom == .phone {
             List(viewModel.tvShowResults!, id: \.self) { result in
                 Button {
-                    sample(imageUrl: result.artworkUrl100,
+                    assignment(imageUrl: result.artworkUrl100,
                            smallImageUrl: result.artworkUrl60,
                            artistName: result.artistName,
                            trackName: result.trackName,
@@ -115,7 +115,7 @@ struct TVView: View {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.tvShowResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    artistName: result.artistName,
                                    trackName: result.trackName,
@@ -190,7 +190,7 @@ struct TVView: View {
         
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,
                 collectionName: String, artistUrl: String, trackUrl: String, collectionUrl: String,
                 releaseDate: String, primaryGenreName: String, constetAdvisoryRating: String, longDescription: String) {
         self.imageUrl = imageUrl

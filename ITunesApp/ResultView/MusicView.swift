@@ -31,7 +31,7 @@ struct MusicView: View {
         
         List(viewModel.musicResults!, id: \.self) { result in
             Button {
-                sample(imageUrl: result.artworkUrl100,
+                assignment(imageUrl: result.artworkUrl100,
                        smallImageUrl: result.artworkUrl30,
                        trackName: result.trackName,
                        artistName: result.artistName,
@@ -120,7 +120,7 @@ struct MusicView: View {
         }
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, trackName: String, artistName: String, collectionName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, trackName: String, artistName: String, collectionName: String,
                 trackPrice: String, collectionPrice: String, artistUrl: String, videoUrl: String, collectionUrl: String,
                 primaryGenreName: String, releaseDate: String, trackTimeMillis: Int) {
         self.imageUrl = imageUrl

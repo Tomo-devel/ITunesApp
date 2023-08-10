@@ -49,7 +49,6 @@ struct HomeView: View {
         
         NavigationSplitView {
             VStack(spacing: 1) {
-                
                 if UIDevice.current.userInterfaceIdiom == .phone {
                     List(selection: $selectITunes) {
                         ForEach(ITunes.allCases, id: \.self) { itunes in
@@ -65,6 +64,7 @@ struct HomeView: View {
                             .fontWeight(.bold)
                             .listRowSeparator(.hidden)
                         
+                        // TODO: 通信の結果を表示
                         ScrollView(.horizontal) {
                             HStack {
                                 ForEach(0 ..< 10) { _ in
@@ -137,7 +137,6 @@ struct HomeView: View {
                     }
                 }
             }
-            
             
         } detail: {
             NavigationStack {

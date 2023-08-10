@@ -44,7 +44,7 @@ struct AudiobookView: View {
         if UIDevice.current.userInterfaceIdiom == .phone {
             List(viewModel.audiobookResult!, id: \.self) { result in
                 Button {
-                    sample(imageUrl: result.artworkUrl100,
+                    assignment(imageUrl: result.artworkUrl100,
                            smallImageUrl: result.artworkUrl60,
                            trackName: "",
                            collectionName: result.collectionName,
@@ -115,7 +115,7 @@ struct AudiobookView: View {
                 LazyVGrid(columns: columns, alignment: .center) {
                     ForEach(viewModel.audiobookResult!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    trackName: "",
                                    collectionName: result.collectionName,
@@ -205,7 +205,7 @@ struct AudiobookView: View {
         }
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, trackName: String, collectionName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, trackName: String, collectionName: String,
                 artistName: String, collectionUrl: String, artistUrl: String,
                 videoUrl: String, collectionPrice: String, releaseDate: String,
                 primaryGenreName: String, description: String) {

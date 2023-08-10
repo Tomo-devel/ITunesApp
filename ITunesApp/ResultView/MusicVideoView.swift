@@ -49,7 +49,7 @@ struct MusicVideoView: View {
                 VStack(alignment: .leading) {
                     ForEach(viewModel.musicVideoResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    artistName: result.artistName,
                                    trackName: result.trackName,
@@ -125,7 +125,7 @@ struct MusicVideoView: View {
                 LazyVGrid(columns: columns, alignment: .center) {
                     ForEach(viewModel.musicVideoResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    artistName: result.artistName,
                                    trackName: result.trackName,
@@ -201,7 +201,7 @@ struct MusicVideoView: View {
         
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String, collectionName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String, collectionName: String,
                 artistUrl: String, trackUrl: String, collectionUrl: String, videoUrl: String ,
                 trackPrice: String, collectonPrice: String,
                 releaseDate: String, trackTimeMillis: Int, primaryGenreName: String) {

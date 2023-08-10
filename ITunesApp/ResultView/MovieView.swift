@@ -43,7 +43,7 @@ struct MovieView: View {
         if UIDevice.current.userInterfaceIdiom == .phone {
             List(viewModel.movieResults!, id: \.self) { result in
                 Button {
-                    sample(imageUrl: result.artworkUrl100,
+                    assignment(imageUrl: result.artworkUrl100,
                            smallImageUrl: result.artworkUrl60,
                            trackName:result.trackName,
                            artistName: result.artistName,
@@ -120,7 +120,7 @@ struct MovieView: View {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.movieResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    trackName:result.trackName,
                                    artistName: result.artistName,
@@ -207,7 +207,7 @@ struct MovieView: View {
     }
     
     
-    func sample(imageUrl: String, smallImageUrl: String, trackName: String, artistName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, trackName: String, artistName: String,
                 price: String, videoUrl: String?,
                 longDescription: String, primaryGenreName: String,
                 releaseDate: String, trackTimeMillis: Int) {

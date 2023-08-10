@@ -45,7 +45,7 @@ struct PodcastView: View {
             ScrollView {
                 ForEach(viewModel.podcastResults!, id: \.self) { result in
                     Button {
-                        sample(imageUrl: result.artworkUrl100,
+                        assignment(imageUrl: result.artworkUrl100,
                                smallImageUrl: result.artworkUrl60,
                                artistName: result.artistName,
                                trackName: result.trackName,
@@ -128,7 +128,7 @@ struct PodcastView: View {
                 LazyVGrid(columns: columns, alignment: .center) {
                     ForEach(viewModel.podcastResults!, id: \.self) { result in
                         Button {
-                            sample(imageUrl: result.artworkUrl100,
+                            assignment(imageUrl: result.artworkUrl100,
                                    smallImageUrl: result.artworkUrl60,
                                    artistName: result.artistName,
                                    trackName: result.trackName,
@@ -218,7 +218,7 @@ struct PodcastView: View {
         }
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, artistName: String, trackName: String,
                 collectionName: String, trackUrl: String, collectionUrl: String, trackPrice: String,
                 collectionPrice: String, releaseDate: String, trackTimeMillis: Int, genres: [String])  {
         self.imageUrl = imageUrl

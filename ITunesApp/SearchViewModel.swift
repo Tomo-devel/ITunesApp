@@ -123,7 +123,6 @@ class SearchViewModel: ObservableObject {
                         audiobookResult = result.results
                     }
                     
-                    print("bbb")
                     status = .succese
                     
                 } catch {

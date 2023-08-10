@@ -30,7 +30,7 @@ struct EbookView: View {
         
         List(viewModel.ebookResults!, id: \.self) { result in
             Button {
-                sample(imageUrl: result.artworkUrl100,
+                assignment(imageUrl: result.artworkUrl100,
                        smallImageUrl: result.artworkUrl60,
                        trackName: result.trackName,
                        artistName: result.artistName,
@@ -96,7 +96,7 @@ struct EbookView: View {
         }
     }
     
-    func sample(imageUrl: String, smallImageUrl: String, trackName: String,
+    func assignment(imageUrl: String, smallImageUrl: String, trackName: String,
                 artistName: String, price: String, trackUrl: String, artistUrl: String,
                 description: String, releaseDate: String, averageUserRating: Double,
                 userRatingCount: Int, genres: [String]) {
