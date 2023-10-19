@@ -18,7 +18,7 @@ enum ITunes: String, CaseIterable {
     case audiobook
     
     
-    func changeJP() -> (String, String) {
+    func converting_to_japanese() -> (String, String) {
         switch self {
         case .movie:
             return ("映画", "popcorn")
@@ -53,7 +53,7 @@ struct HomeView: View {
                     List(selection: $selectITunes) {
                         ForEach(ITunes.allCases, id: \.self) { itunes in
                             NavigationLink(value: itunes) {
-                                Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
+                                Label(itunes.converting_to_japanese().0, systemImage: itunes.converting_to_japanese().1)
                                     .foregroundColor(.black)
                             }
                         }
@@ -114,7 +114,7 @@ struct HomeView: View {
                 } else {
                     List(ITunes.allCases, id: \.self, selection: $selectITunes) { itunes in
                         NavigationLink(value: itunes) {
-                            Label(itunes.changeJP().0, systemImage: itunes.changeJP().1)
+                            Label(itunes.converting_to_japanese().0, systemImage: itunes.converting_to_japanese().1)
                                 .foregroundColor(.black)
                         }
                     }
@@ -143,7 +143,7 @@ struct HomeView: View {
                 SearchView(isSearch: $isSearch,
                            categoryArray: ITunes.allCases,
                            media: selectITunes?.rawValue ?? "all",
-                           category: selectITunes?.changeJP().0 ?? "HOME",
+                           category: selectITunes?.converting_to_japanese().0 ?? "HOME",
                            itunes: selectITunes ?? .movie)
             }
         }

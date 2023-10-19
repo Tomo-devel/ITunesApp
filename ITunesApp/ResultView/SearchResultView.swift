@@ -94,6 +94,9 @@ struct SearchResultView: View {
                 
             case .failded:
                 Text("ネットワークにつながりません。")
+                    .font(.title)
+                    .foregroundColor(.red)
+                    .padding()
             }
         }
         .navigationTitle(term)

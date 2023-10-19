@@ -105,7 +105,11 @@ struct SearchView: View {
                     }
                     
                 case .failded:
-                    Text("ネットワークに繋がりません")
+                    ProgressView("ネットワークに繋がりません")
+                        .font(.title3)
+                        .foregroundColor(.red)
+                        .padding()
+                        .multilineTextAlignment(.leading)
                     
                 case .unfinished:
                     HStack {
